@@ -1,0 +1,40 @@
+카테고리 
+category1 : 축하화환
+category2 : 근조화환
+category3 : 관엽
+category4 : 동양란
+category5 : 서양란
+category6 : 분재
+category7 : 꽃다발
+category8 : 꽃바구니
+category9 : 행사용상품
+
+category1_product1_img : 3단 축하화환 6만원
+category1_product2_img : 3단 축하화환 8만원
+category1_product3_img : 3단 축하화환 10만원
+category1_product4_img : 3단 축하쌀화환 10만원
+
+category2_product1_img : 2단 근조화환(장구) 10만원
+category2_product2_img : 3단 근조화환 6만원
+category2_product3_img : 3단 근조화환 8만원
+category2_product4_img : 3단 근조화환 10만원
+
+category3_product1_img : 관엽 5만원
+category3_product2_img : 관엽 6만원
+category3_product3_img : 관엽 10만원
+category3_product4_img : 관엽 15만원
+category3_product5_img : 금전수 5만원
+
+category4_product1_img : 동양란 10만원
+
+category5_product1_img : 서양란 10만원
+
+category7_product1_img : 꽃다발 3만원
+category7_product2_img : 꽃다발 5만원
+category7_product3_img : 꽃다발 10만원
+category7_product4_img : 꽃다발 20만원
+
+category8_product1_img : 꽃바구니 7만원
+category8_product2_img : 꽃바구니 장미 50송이
+
+category9_product1_img : 꽃목걸이 10만원

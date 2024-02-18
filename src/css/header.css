@@ -1,3 +1,65 @@
 /* header */
 .header {
+  width: 100%;
+  /* height: 9.38vw; */
+  height: 6.1vw;
+  display: flex;
+  flex-direction: column;
+}
+.header .logo_container {
+  width: 100%;
+  /* height: 65%; */
+  height: 100%;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+.header .logo_container .img_box {
+  width: 10%;
+  height: 100%;
+  border: 1px solid red;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.header .logo_container .img_box img {
+  height: 75%;
+  cursor: pointer;
+}
+.header .logo_container .text_box {
+  border: 1px solid red;
+  display: flex;
+  margin-right: 3vw;
+}
+.header .logo_container .text_box p {
+  font-size: 1vw;
+  margin-right: 2vw;
+  cursor: pointer;
+}
+.header .logo_container .text_box p:last-child {
+  margin-right: 0;
+}
+.header .nav_container {
+  width: 100%;
+  height: 35%;
+  border-top: 1px solid gray;
+  border-bottom: 1px solid gray;
+}
+.header .nav_container .nav_box {
+  width: 70%;
+  height: 100%;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.header .nav_container .nav_box p {
+  font-size: 1vw;
+  font-weight: 600;
+  cursor: pointer;
 }

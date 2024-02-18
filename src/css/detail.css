@@ -1,0 +1,28 @@
+/* detail */
+.detail {
+  width: 70%;
+  height: auto;
+  margin: 0 auto;
+  margin-top: 2vw;
+  display: flex;
+  justify-content: space-between;
+  border: 1px solid red;
+}
+.detail .detail_container {
+  width: 36.46vw;
+  height: auto;
+  border: 1px solid blue;
+}
+.detail .detail_container img {
+  width: 100%;
+}
+.detail .content_container {
+  width: 40%;
+  border: 1px solid blue;
+}
+.detail .content_container p {
+  height: 3vw;
+  font-size: 2vw;
+  margin-top: 2vw;
+  border-bottom: 1px solid gray;
+}
