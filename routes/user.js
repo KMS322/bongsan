@@ -54,46 +54,16 @@ router.post("/signup", isNotLoggedIn, async (req, res, next) => {
   }
 });
 
-// router.post("/login", isNotLoggedIn, async (req, res, next) => {
-//   try {
-//     const user = await User.findOne({
-//       where: {
-//         user_id: req.body.userID,
-//       },
-//     });
-//     if (!user) {
-//       res.status(300).send("등록된 아이디가 아닙니다.");
-//     }
-//     const result = await bcrypt.compare(req.body.userPW, user.user_pw);
-//     if (result) {
-//       const responseUser = {
-//         user_id: user.user_id,
-//       };
-//       res.status(200).json(responseUser);
-//     } else {
-//       res.status(401).send("비밀번호가 틀렸습니다.");
-//     }
-//   } catch (error) {
-//     console.error(error);
-//     next();
-//   }
-// });
 router.post("/login", isNotLoggedIn, (req, res, next) => {
   passport.authenticate("local", (err, user, info) => {
-    console.log("AA");
     if (err) {
-      console.log("bb");
-
       console.error(err);
       return next(err);
     }
     if (info) {
       console.log("info : ", info);
-      console.log("cc");
-
       return res.status(401).send(info.reason);
     }
-    console.log("dd");
 
     return req.login(user, async (loginErr) => {
       if (loginErr) {
@@ -156,7 +126,6 @@ router.post("/changePassword", isLoggedIn, async (req, res, next) => {
   }
 });
 router.post("/logout", isLoggedIn, (req, res) => {
-  console.log("AA");
   req.logout(() => {
     // res.redirect("/");
   });

@@ -16,13 +16,9 @@ const Header = () => {
   }, [me, logOutDone]);
 
   const logout = () => {
-    if (!me) {
-      navigate("/login");
-    } else {
-      dispatch({
-        type: LOG_OUT_REQUEST,
-      });
-    }
+    dispatch({
+      type: LOG_OUT_REQUEST,
+    });
   };
   return (
     <div className="header">

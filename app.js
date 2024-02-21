@@ -9,10 +9,9 @@ const addProductsRouter = require("./routes/addProducts");
 const productRouter = require("./routes/product");
 const db = require("./models");
 const passportConfig = require("./passport");
-const path = require("path");
+const app = express();
 
 dotenv.config();
-const app = express();
 
 db.sequelize
   .sync()

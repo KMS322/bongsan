@@ -15,7 +15,12 @@ const Detail = () => {
         ))}
       </div>
       <div className="content_container">
-        <p>{product.product_name}</p>
+        <div className="tag_box">
+          <p>#결혼식</p>
+          <p>#축하화환</p>
+          <p>#화환전문관</p>
+        </div>
+        <p className="name">{product.product_name}</p>
         <div className="price_box">
           <p>{Number(product.product_truePrice).toLocaleString()}원</p>
           <p> {Number(product.product_falsePrice).toLocaleString()}원</p>

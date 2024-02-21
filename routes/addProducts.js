@@ -36,6 +36,7 @@ function generateObjectArrayFromExcel(filePath) {
 }
 
 router.post("/", async (req, res, next) => {
+  console.log("AA");
   try {
     const products = generateObjectArrayFromExcel(filePath);
     for (const product of products) {

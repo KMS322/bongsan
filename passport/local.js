@@ -6,8 +6,8 @@ module.exports = () => {
   passport.use(
     new LocalStrategy(
       {
-        usernameField: "user_id",
-        passwordField: "user_pw",
+        usernameField: "userID",
+        passwordField: "userPW",
         passReqToCallback: true,
       },
       async (req, userID, userPW, done) => {
