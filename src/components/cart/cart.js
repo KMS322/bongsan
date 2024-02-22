@@ -1,14 +1,14 @@
 import "../../css/cart.css";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { LOAD_CART_REQUEST } from "../../reducers/cart";
+import { LOAD_CART_REQUEST, DELETE_CART_REQUEST } from "../../reducers/cart";
 import { useNavigate } from "react-router-dom";
 const Cart = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { me } = useSelector((state) => state.user);
   const { products } = useSelector((state) => state.product);
-  const { cartLists } = useSelector((state) => state.cart);
+  const { cartLists, deleteCartDone } = useSelector((state) => state.cart);
 
   useEffect(() => {
     dispatch({
@@ -69,6 +69,38 @@ const Cart = () => {
   };
 
   const [selectedSale, setSelectedSale] = useState(true);
+
+  const handleDeleteSelected = () => {
+    const selectedIds = cartLists.reduce((selected, _, index) => {
+      if (checkboxStates[index]) {
+        selected.push(cartLists[index].id);
+      }
+      return selected;
+    }, []);
+    dispatch({
+      type: DELETE_CART_REQUEST,
+      data: {
+        productIds: selectedIds,
+      },
+    });
+  };
+
+  const handleDeleteAll = () => {
+    const allIds = cartLists.map((item) => item.id);
+    dispatch({
+      type: DELETE_CART_REQUEST,
+      data: {
+        productIds: allIds,
+      },
+    });
+  };
+
+  useEffect(() => {
+    if (deleteCartDone) {
+      window.location.href = "/cart";
+    }
+  }, [deleteCartDone]);
+
   return (
     <div className="cart">
       <p>장바구니</p>
@@ -130,8 +162,12 @@ const Cart = () => {
             })}
 
           <div className="btn_box">
-            <div className="btn">선택 삭제</div>
-            <div className="btn">전체 삭제</div>
+            <div className="btn" onClick={handleDeleteSelected}>
+              선택 삭제
+            </div>
+            <div className="btn" onClick={handleDeleteAll}>
+              전체 삭제
+            </div>
           </div>
         </div>
         <div className="pay_container">

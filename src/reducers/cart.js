@@ -7,6 +7,9 @@ export const initialState = {
   loadCartLoading: false,
   loadCartDone: false,
   loadCartError: null,
+  deleteCartLoading: false,
+  deleteCartDone: false,
+  deleteCartError: null,
   cartLists: null,
 };
 
@@ -17,6 +20,10 @@ export const ADD_CART_FAILURE = "ADD_CART_FAILURE";
 export const LOAD_CART_REQUEST = "LOAD_CART_REQUEST";
 export const LOAD_CART_SUCCESS = "LOAD_CART_SUCCESS";
 export const LOAD_CART_FAILURE = "LOAD_CART_FAILURE";
+
+export const DELETE_CART_REQUEST = "DELETE_CART_REQUEST";
+export const DELETE_CART_SUCCESS = "DELETE_CART_SUCCESS";
+export const DELETE_CART_FAILURE = "DELETE_CART_FAILURE";
 
 const reducer = (state = initialState, action) => {
   return produce(state, (draft) => {
@@ -48,6 +55,22 @@ const reducer = (state = initialState, action) => {
       case LOAD_CART_FAILURE:
         draft.loadCartLoading = false;
         draft.loadCartError = action.error;
+        break;
+      case DELETE_CART_REQUEST:
+        draft.deleteCartLoading = true;
+        draft.deleteCartError = null;
+        draft.deleteCartDone = false;
+        break;
+      case DELETE_CART_SUCCESS:
+        draft.deleteCartLoading = false;
+        draft.cartLists = draft.cartLists.filter(
+          (item) => !action.data.includes(item.id)
+        );
+        draft.deleteCartDone = true;
+        break;
+      case DELETE_CART_FAILURE:
+        draft.deleteCartLoading = false;
+        draft.deleteCartError = action.error;
         break;
       default:
         return state;

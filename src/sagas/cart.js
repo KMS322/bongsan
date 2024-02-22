@@ -7,6 +7,9 @@ import {
   LOAD_CART_REQUEST,
   LOAD_CART_SUCCESS,
   LOAD_CART_FAILURE,
+  DELETE_CART_REQUEST,
+  DELETE_CART_SUCCESS,
+  DELETE_CART_FAILURE,
 } from "../reducers/cart";
 
 function addCartAPI(data) {
@@ -49,6 +52,26 @@ function* loadCart(action) {
   }
 }
 
+function deleteCartAPI(data) {
+  return axios.post("/cart/delete", data);
+}
+
+function* deleteCart(action) {
+  try {
+    const result = yield call(deleteCartAPI, action.data);
+    yield put({
+      type: DELETE_CART_SUCCESS,
+      data: result.data,
+    });
+  } catch (err) {
+    console.error(err);
+    yield put({
+      type: DELETE_CART_FAILURE,
+      error: err.response.data,
+    });
+  }
+}
+
 function* watchaddCart() {
   yield takeLatest(ADD_CART_REQUEST, addCart);
 }
@@ -57,6 +80,10 @@ function* watchloadCart() {
   yield takeLatest(LOAD_CART_REQUEST, loadCart);
 }
 
+function* watchdeleteCart() {
+  yield takeLatest(DELETE_CART_REQUEST, deleteCart);
+}
+
 export default function* cartSaga() {
-  yield all([fork(watchaddCart), fork(watchloadCart)]);
+  yield all([fork(watchaddCart), fork(watchloadCart), fork(watchdeleteCart)]);
 }

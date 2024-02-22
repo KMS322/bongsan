@@ -2,6 +2,7 @@
 .cart {
   width: 70%;
   margin: 0 auto;
+  margin-bottom: 10vw;
   height: auto;
 }
 .cart > p {

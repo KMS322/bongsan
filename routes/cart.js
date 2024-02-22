@@ -26,4 +26,18 @@ router.post("/load", async (req, res, next) => {
     next();
   }
 });
+
+router.post("/delete", async (req, res, next) => {
+  try {
+    const { ids } = req.body;
+    const lists = await Cart.destroy({
+      where: { id: ids },
+    });
+    res.status(200).json(lists);
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+});
+
 module.exports = router;
