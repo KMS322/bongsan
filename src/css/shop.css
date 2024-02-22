@@ -42,12 +42,10 @@
   margin-top: 3vw;
   display: flex;
   flex-wrap: wrap;
-  border: 1px solid red;
 }
 .shop .article_container .article {
   width: 30%;
   height: auto;
-  border: 1px solid red;
   margin-bottom: 3vw;
   margin-right: 5%;
   cursor: pointer;

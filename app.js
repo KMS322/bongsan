@@ -7,6 +7,7 @@ const dotenv = require("dotenv");
 const userRouter = require("./routes/user");
 const addProductsRouter = require("./routes/addProducts");
 const productRouter = require("./routes/product");
+const cartRouter = require("./routes/cart");
 const db = require("./models");
 const passportConfig = require("./passport");
 const app = express();
@@ -55,6 +56,7 @@ app.get("/", (req, res) => {
 app.use("/user", userRouter);
 app.use("/addProducts", addProductsRouter);
 app.use("/product", productRouter);
+app.use("/cart", cartRouter);
 // app.use((err, req, res, next) => {
 //   // 에러 처리 미들웨어
 // });

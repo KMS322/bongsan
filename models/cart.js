@@ -6,14 +6,16 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING(10),
         allowNull: false,
       },
+      user_id: {
+        type: DataTypes.STRING(10),
+        allowNull: true,
+      },
     },
     {
       charset: "utf8mb4",
       collate: "utf8mb4_general_ci",
     }
   );
-  Cart.associate = (db) => {
-    db.Cart.belongsTo(db.User, { foreignKey: "userId" });
-  };
+  Cart.associate = (db) => {};
   return Cart;
 };

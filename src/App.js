@@ -8,6 +8,8 @@ import Shop from "./components/shop/shop";
 import Login from "./components/login/login";
 import Signin from "./components/signin/signin";
 import Detail from "./components/shop/detail";
+import Cart from "./components/cart/cart";
+import Order from "./components/order/order";
 import { useDispatch, useSelector } from "react-redux";
 import { LOAD_MY_INFO_REQUEST } from "./reducers/user";
 import { LOAD_PRODUCTS_REQUEST } from "./reducers/product";
@@ -34,6 +36,8 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/signin" element={<Signin />} />
         <Route path="/detail/:id" element={<Detail />} />
+        <Route path="/cart" element={<Cart />} />
+        <Route path="/order" element={<Order />} />
       </Routes>
       <Footer />
     </>

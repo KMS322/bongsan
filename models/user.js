@@ -45,8 +45,6 @@ module.exports = (sequelize, DataTypes) => {
       collate: "utf8mb4_general_ci",
     }
   );
-  User.associate = (db) => {
-    db.User.hasMany(db.Cart, { foreignKey: "userId" });
-  };
+  User.associate = (db) => {};
   return User;
 };
