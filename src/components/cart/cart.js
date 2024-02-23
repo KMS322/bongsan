@@ -9,7 +9,7 @@ const Cart = () => {
   const { me } = useSelector((state) => state.user);
   const { products } = useSelector((state) => state.product);
   const { cartLists, deleteCartDone } = useSelector((state) => state.cart);
-
+  console.log("deleteCartDone : ", deleteCartDone);
   useEffect(() => {
     dispatch({
       type: LOAD_CART_REQUEST,
@@ -20,19 +20,23 @@ const Cart = () => {
   }, []);
 
   const cartProducts =
-    cartLists &&
-    cartLists.map((list) => {
-      const product = products.find(
-        (product) => product.id === Number(list.product_id)
-      );
-      return product;
-    });
+    cartLists && cartLists.length > 0
+      ? cartLists.map((list) => {
+          const product = products.find(
+            (product) => product.id === Number(list.product_id)
+          );
+          return product;
+        })
+      : [];
   const [allCheck, setAllCheck] = useState(true);
   const [checkboxStates, setCheckboxStates] = useState([]);
-
+  const [cnt, setCnt] = useState([]);
   useEffect(() => {
     const initialCheckboxStates = cartLists && cartLists.map(() => true);
     setCheckboxStates(initialCheckboxStates);
+
+    const initialCnt = cartLists && cartLists.map((item) => item.product_cnt);
+    setCnt(initialCnt);
   }, [cartLists]);
 
   const handleSelectAll = () => {
@@ -41,20 +45,29 @@ const Cart = () => {
     setAllCheck(!allCheck);
   };
 
+  const handleCntChange = (index, value) => {
+    const newCnt = [...cnt];
+    newCnt[index] = value;
+    setCnt(newCnt);
+  };
+
   const totalPrice =
     cartProducts &&
     cartProducts.reduce((total, product, index) => {
       if (checkboxStates[index]) {
-        return total + Number(product.product_truePrice);
+        const productPrice = Number(product.product_truePrice);
+        const productCnt = cnt[index];
+        return total + productPrice * productCnt;
       }
       return total;
     }, 0);
 
   const totalQuantity =
     cartProducts &&
-    cartProducts.reduce((total, product, index) => {
+    cartProducts.reduce((total, _, index) => {
       if (checkboxStates[index]) {
-        return total + 1;
+        const productCnt = cnt[index];
+        return total + productCnt;
       }
       return total;
     }, 0);
@@ -70,13 +83,26 @@ const Cart = () => {
 
   const [selectedSale, setSelectedSale] = useState(true);
 
+  const handleDeleteOne = (id) => {
+    const selected = [id];
+    console.log("id : ", id);
+    dispatch({
+      type: DELETE_CART_REQUEST,
+      data: {
+        productIds: selected,
+      },
+    });
+  };
+
   const handleDeleteSelected = () => {
-    const selectedIds = cartLists.reduce((selected, _, index) => {
-      if (checkboxStates[index]) {
-        selected.push(cartLists[index].id);
-      }
-      return selected;
-    }, []);
+    const selectedIds =
+      cartLists &&
+      cartLists.reduce((selected, _, index) => {
+        if (checkboxStates[index]) {
+          selected.push(cartLists[index].id);
+        }
+        return selected;
+      }, []);
     dispatch({
       type: DELETE_CART_REQUEST,
       data: {
@@ -97,7 +123,12 @@ const Cart = () => {
 
   useEffect(() => {
     if (deleteCartDone) {
-      window.location.href = "/cart";
+      dispatch({
+        type: LOAD_CART_REQUEST,
+        data: {
+          user_id: me && me.user_id,
+        },
+      });
     }
   }, [deleteCartDone]);
 
@@ -139,11 +170,26 @@ const Cart = () => {
                     <p>
                       {Number(product.product_truePrice).toLocaleString()}원
                     </p>
-                    <img src="/images/btn_delete.png" alt="" />
+                    <img
+                      src="/images/btn_delete.png"
+                      alt=""
+                      onClick={() => {
+                        handleDeleteOne(cartLists[index].id);
+                      }}
+                    />
+                    <div className="cnt_box">
+                      <p>수량</p>
+                      <input
+                        type="number"
+                        value={cnt[index]}
+                        onChange={(e) => handleCntChange(index, e.target.value)}
+                      />
+                      <p>개</p>
+                    </div>
                   </div>
                   <div className="sale_box">
                     <p>
-                      구매혜택 :{" "}
+                      구매혜택
                       <span>
                         {(
                           Number(product.product_truePrice) * 0.1

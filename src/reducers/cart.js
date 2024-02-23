@@ -63,9 +63,6 @@ const reducer = (state = initialState, action) => {
         break;
       case DELETE_CART_SUCCESS:
         draft.deleteCartLoading = false;
-        draft.cartLists = draft.cartLists.filter(
-          (item) => !action.data.includes(item.id)
-        );
         draft.deleteCartDone = true;
         break;
       case DELETE_CART_FAILURE:

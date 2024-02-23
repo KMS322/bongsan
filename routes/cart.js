@@ -7,6 +7,7 @@ router.post("/add", async (req, res, next) => {
     await Cart.create({
       user_id: req.body.user_id,
       product_id: req.body.product_id,
+      product_cnt: req.body.product_cnt,
     });
     res.status(200).send("added");
   } catch (error) {
@@ -29,11 +30,11 @@ router.post("/load", async (req, res, next) => {
 
 router.post("/delete", async (req, res, next) => {
   try {
-    const { ids } = req.body;
+    const { productIds } = req.body;
     const lists = await Cart.destroy({
-      where: { id: ids },
+      where: { id: productIds },
     });
-    res.status(200).json(lists);
+    res.status(200).send("ok");
   } catch (error) {
     console.error(error);
     next(error);

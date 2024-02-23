@@ -15,6 +15,7 @@ const Detail = () => {
   const [selectedKind, setSelectedKind] = useState("");
   const [selectedOption, setSelectedOption] = useState("");
   const [sale, setSale] = useState(true);
+  const [cnt, setCnt] = useState(1);
   const [openInfo1, setOpenInfo1] = useState(true);
   const [openInfo2, setOpenInfo2] = useState(true);
   const [openConfirmModal, setOpenConfirmModal] = useState(false);
@@ -24,6 +25,9 @@ const Detail = () => {
   };
   const handleOption = (e) => {
     setSelectedOption(e.target.value);
+  };
+  const handleCnt = (e) => {
+    setCnt(e.target.value);
   };
   const product =
     products && products.find((product) => product.id === Number(id));
@@ -47,14 +51,15 @@ const Detail = () => {
       data: {
         user_id: me && Number(me.user_id),
         product_id: product.id,
+        product_cnt: cnt,
       },
     });
   };
   useEffect(() => {
     if (addCartDone) {
       setOpenConfirmModal(false);
-      setModalText("장바구니 확인하러 가기");
-      setOpenConfirmModal(true);
+      // setModalText("장바구니 확인하러 가기");
+      // setOpenConfirmModal(true);
     }
   }, [addCartDone]);
   if (product) {
@@ -167,9 +172,18 @@ const Detail = () => {
                 </select>
               </div>
             </div>
+            <div className="cnt_box">
+              <p>수량</p>
+              <div className="cnt_input_box">
+                <input type="number" value={cnt} onChange={handleCnt} />
+                <p>개</p>
+              </div>
+            </div>
             <div className="total_box">
               <p>총 상품 금액</p>
-              <p>{Number(product.product_truePrice).toLocaleString()}원</p>
+              <p>
+                {(Number(product.product_truePrice) * cnt).toLocaleString()}원
+              </p>
             </div>
             <div className="btn_box">
               <div
