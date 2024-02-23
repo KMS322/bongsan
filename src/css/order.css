@@ -169,7 +169,7 @@
 .order .article_container .order_container .order_box .right_box .select_text {
   font-size: 0.7vw;
   color: #2b746a;
-  line-height: 0.8vw;
+  line-height: 1.12vw;
   margin-top: 0.3vw;
 }
 .order
@@ -391,6 +391,7 @@
 }
 .order .article_container .pay_container .pay_box .agree_text p {
   font-size: 0.7vw;
+  line-height: 1.12vw;
 }
 .order .article_container .pay_container .pay_box .pay_btn {
   width: 100%;
