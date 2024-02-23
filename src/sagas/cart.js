@@ -59,7 +59,6 @@ function deleteCartAPI(data) {
 function* deleteCart(action) {
   try {
     const result = yield call(deleteCartAPI, action.data);
-    console.log("result : ", result);
     yield put({
       type: DELETE_CART_SUCCESS,
       data: result.data,

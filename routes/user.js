@@ -61,7 +61,6 @@ router.post("/login", isNotLoggedIn, (req, res, next) => {
       return next(err);
     }
     if (info) {
-      console.log("info : ", info);
       return res.status(401).send(info.reason);
     }
 
@@ -106,7 +105,6 @@ router.post("/changePassword", isLoggedIn, async (req, res, next) => {
         id: req.body.userID,
       },
     });
-    console.log("changeUser : ", changeUser);
     const currentPasswordMatch = await bcrypt.compare(
       req.body.user_currentPW,
       changeUser.user_member_pw

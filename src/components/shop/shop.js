@@ -10,7 +10,6 @@ const Shop = () => {
   const navigate = useNavigate();
   const { id } = useParams();
   const [currentCategory, setCurrentCategory] = useState("1");
-  console.log("products : ", products);
   useEffect(() => {
     dispatch({
       type: LOAD_PRODUCTS_REQUEST,

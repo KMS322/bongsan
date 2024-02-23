@@ -9,7 +9,6 @@ const Cart = () => {
   const { me } = useSelector((state) => state.user);
   const { products } = useSelector((state) => state.product);
   const { cartLists, deleteCartDone } = useSelector((state) => state.cart);
-  console.log("deleteCartDone : ", deleteCartDone);
   useEffect(() => {
     dispatch({
       type: LOAD_CART_REQUEST,
@@ -17,7 +16,7 @@ const Cart = () => {
         user_id: me && me.user_id,
       },
     });
-  }, []);
+  }, [dispatch, me]);
 
   const cartProducts =
     cartLists && cartLists.length > 0
@@ -53,6 +52,7 @@ const Cart = () => {
 
   const totalPrice =
     cartProducts &&
+    cnt &&
     cartProducts.reduce((total, product, index) => {
       if (checkboxStates[index]) {
         const productPrice = Number(product.product_truePrice);
@@ -64,6 +64,7 @@ const Cart = () => {
 
   const totalQuantity =
     cartProducts &&
+    cnt &&
     cartProducts.reduce((total, _, index) => {
       if (checkboxStates[index]) {
         const productCnt = cnt[index];
@@ -85,7 +86,6 @@ const Cart = () => {
 
   const handleDeleteOne = (id) => {
     const selected = [id];
-    console.log("id : ", id);
     dispatch({
       type: DELETE_CART_REQUEST,
       data: {
@@ -130,7 +130,7 @@ const Cart = () => {
         },
       });
     }
-  }, [deleteCartDone]);
+  }, [dispatch, deleteCartDone, me]);
 
   return (
     <div className="cart">
@@ -148,6 +148,7 @@ const Cart = () => {
       <div className="article_container">
         <div className="cart_container">
           {cartProducts &&
+            cnt &&
             cartProducts.map((product, index) => {
               return (
                 <div className="cart_box" key={index}>
