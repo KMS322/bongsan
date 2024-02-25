@@ -27,8 +27,6 @@ const AddModal = ({ onClose }) => {
     const formData = new FormData();
     formData.append("mainImage", reviewImgSrc);
     const fileName = reviewImgSrc.name;
-    console.log("reviewImgSrc : ", reviewImgSrc);
-    console.log("fileName : ", fileName);
     try {
       const response = await axios.post("/admin/uploadReview", formData, {
         headers: {
