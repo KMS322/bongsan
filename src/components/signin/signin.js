@@ -181,7 +181,9 @@ const Signin = () => {
         <div className="check_box">
           <img
             src={
-              checkListAll ? "/images/box_check.jpg" : "/images/box_unCheck.jpg"
+              checkListAll
+                ? "/images/btn_checked.png"
+                : "/images/btn_unChecked.png"
             }
             alt=""
             onClick={() => {
@@ -205,7 +207,9 @@ const Signin = () => {
         <div className="check_box">
           <img
             src={
-              checkList1 ? "/images/box_check.jpg" : "/images/box_unCheck.jpg"
+              checkList1
+                ? "/images/btn_checked.png"
+                : "/images/btn_unChecked.png"
             }
             alt=""
             onClick={() => {
@@ -285,7 +289,9 @@ const Signin = () => {
         <div className="check_box">
           <img
             src={
-              checkList2 ? "/images/box_check.jpg" : "/images/box_unCheck.jpg"
+              checkList2
+                ? "/images/btn_checked.png"
+                : "/images/btn_unChecked.png"
             }
             alt=""
             onClick={() => {
@@ -365,7 +371,9 @@ const Signin = () => {
         <div className="check_box">
           <img
             src={
-              checkList3 ? "/images/box_check.jpg" : "/images/box_unCheck.jpg"
+              checkList3
+                ? "/images/btn_checked.png"
+                : "/images/btn_unChecked.png"
             }
             alt=""
             onClick={() => {
@@ -380,7 +388,9 @@ const Signin = () => {
         <div className="check_box">
           <img
             src={
-              checkList4 ? "/images/box_check.jpg" : "/images/box_unCheck.jpg"
+              checkList4
+                ? "/images/btn_checked.png"
+                : "/images/btn_unChecked.png"
             }
             alt=""
             onClick={() => {

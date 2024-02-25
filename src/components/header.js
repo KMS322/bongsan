@@ -33,16 +33,15 @@ const Header = () => {
           />
         </div>
         <div className="text_box">
+          <p
+            onClick={() => {
+              navigate("/cart");
+            }}
+          >
+            장바구니
+          </p>
           {me && me ? (
             <>
-              {" "}
-              <p
-                onClick={() => {
-                  navigate("/cart");
-                }}
-              >
-                장바구니
-              </p>
               <p>마이페이지</p>
               <p onClick={logout}>로그아웃</p>
             </>
@@ -64,25 +63,15 @@ const Header = () => {
               </p>
             </>
           )}
-          <p>게시판</p>
+          <p
+            onClick={() => {
+              navigate("/review");
+            }}
+          >
+            배송게시판
+          </p>
         </div>
       </div>
-
-      {/* <div className="nav_container">
-        <div className="nav_box">
-          <p style={{ fontWeight: page === "/portfolio" ? "700" : "700" }}>
-            축하화환
-          </p>
-          <p>근조화환</p>
-          <p>관엽</p>
-          <p>동양란</p>
-          <p>서양란</p>
-          <p>분재</p>
-          <p>꽃다발</p>
-          <p>꽃바구니</p>
-          <p>행사용상품</p>
-        </div>
-      </div> */}
     </div>
   );
 };

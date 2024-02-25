@@ -45,7 +45,7 @@
 }
 .cart .article_container .cart_container .cart_box .content_box {
   width: 100%;
-  height: 80%;
+  height: 100%;
   display: flex;
   justify-content: flex-start;
   padding: 2vw 1.5vw;
@@ -73,12 +73,19 @@
   margin-left: 1vw;
 }
 .cart .article_container .cart_container .cart_box .content_box p:nth-child(3) {
-  width: 65%;
+  width: 40%;
   font-size: 1vw;
   font-weight: 500;
   margin-left: 1vw;
+  margin-right: 6vw;
 }
 .cart .article_container .cart_container .cart_box .content_box p:nth-child(4) {
+  font-size: 1vw;
+  color: gray;
+  text-decoration: line-through;
+  margin-right: 1vw;
+}
+.cart .article_container .cart_container .cart_box .content_box p:nth-child(5) {
   font-size: 1vw;
   font-weight: 600;
 }
@@ -87,7 +94,7 @@
   .cart_container
   .cart_box
   .content_box
-  img:nth-child(5) {
+  img:nth-child(6) {
   width: 1vw;
   height: 1vw;
   cursor: pointer;
@@ -99,7 +106,7 @@
   display: flex;
   align-items: center;
   position: absolute;
-  bottom: 1vw;
+  bottom: 3vw;
   right: 5vw;
 }
 .cart .article_container .cart_container .cart_box .content_box .cnt_box p {
@@ -125,17 +132,6 @@
   margin-left: 1vw;
   text-align: center;
 }
-.cart .article_container .cart_container .cart_box .sale_box {
-  width: 100%;
-  height: 20%;
-  display: flex;
-  align-items: center;
-  padding-left: 1vw;
-  background-color: rgb(224, 224, 224);
-}
-.cart .article_container .cart_container .cart_box .sale_box p {
-  font-size: 0.75vw;
-}
 .cart .article_container .cart_container .btn_box {
   width: 20%;
   height: 2vw;
@@ -159,18 +155,6 @@
   flex-direction: column;
   justify-content: space-between;
 }
-.cart .article_container .pay_container .login_box {
-  width: 100%;
-  height: 8%;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0.5vw;
-  background-color: #2b746a;
-}
-.cart .article_container .pay_container .login_box p {
-  color: white;
-}
 .cart .article_container .pay_container .pay_box {
   width: 100%;
   height: 90%;
@@ -182,30 +166,6 @@
   font-size: 1vw;
   margin-top: 1vw;
   border-bottom: 1px solid black;
-}
-.cart .article_container .pay_container .btn_box {
-  width: 100%;
-  height: 3vw;
-  margin-top: 2vw;
-  display: flex;
-  justify-content: space-between;
-}
-.cart .article_container .pay_container .btn_box .btn {
-  width: 48%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: rgb(248, 248, 248);
-  border: 2px solid gray;
-  cursor: pointer;
-}
-.cart .article_container .pay_container .btn_box .btn img {
-  width: 1vw;
-}
-.cart .article_container .pay_container .btn_box .btn p {
-  font-size: 0.8vw;
-  margin-left: 1vw;
 }
 .cart .article_container .pay_container .price_box {
   width: 100%;

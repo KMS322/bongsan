@@ -1,0 +1,42 @@
+/* adminModal */
+.adminModal {
+  width: 20vw;
+  height: 10vw;
+  background-color: white;
+  border: 1px solid #2b746a;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+}
+.adminModal img {
+  width: 1vw;
+  align-self: flex-end;
+  margin-top: 0.5vw;
+  margin-right: 0.5vw;
+  cursor: pointer;
+}
+.adminModal > p {
+  font-size: 1.2vw;
+}
+.adminModal .btn_box {
+  width: 70%;
+  height: 2vw;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1vw;
+}
+.adminModal .btn_box .btn {
+  width: 30%;
+  height: 100%;
+  font-size: 0.8vw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid black;
+  cursor: pointer;
+}

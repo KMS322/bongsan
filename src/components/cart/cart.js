@@ -3,12 +3,16 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { LOAD_CART_REQUEST, DELETE_CART_REQUEST } from "../../reducers/cart";
 import { useNavigate } from "react-router-dom";
+import ConfirmModal from "../confirmModal";
 const Cart = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { me } = useSelector((state) => state.user);
   const { products } = useSelector((state) => state.product);
   const { cartLists, deleteCartDone } = useSelector((state) => state.cart);
+  const [openConfirmModal, setOpenConfirmModal] = useState(false);
+  const [modalText, setModalText] = useState("");
+  const [deletedId, setDeletedId] = useState(0);
   useEffect(() => {
     dispatch({
       type: LOAD_CART_REQUEST,
@@ -21,9 +25,9 @@ const Cart = () => {
   const cartProducts =
     cartLists && cartLists.length > 0
       ? cartLists.map((list) => {
-          const product = products.find(
-            (product) => product.id === Number(list.product_id)
-          );
+          const product =
+            products &&
+            products.find((product) => product.id === Number(list.product_id));
           return product;
         })
       : [];
@@ -50,7 +54,19 @@ const Cart = () => {
     setCnt(newCnt);
   };
 
-  const totalPrice =
+  const totalFalsePrice =
+    cartProducts &&
+    cnt &&
+    cartProducts.reduce((total, product, index) => {
+      if (checkboxStates[index]) {
+        const productPrice = Number(product.product_falsePrice);
+        const productCnt = cnt[index];
+        return total + productPrice * productCnt;
+      }
+      return total;
+    }, 0);
+
+  const totalTruePrice =
     cartProducts &&
     cnt &&
     cartProducts.reduce((total, product, index) => {
@@ -67,7 +83,7 @@ const Cart = () => {
     cnt &&
     cartProducts.reduce((total, _, index) => {
       if (checkboxStates[index]) {
-        const productCnt = cnt[index];
+        const productCnt = parseInt(cnt[index]);
         return total + productCnt;
       }
       return total;
@@ -75,50 +91,30 @@ const Cart = () => {
 
   const [selectedProducts, setSelectedProducts] = useState([]);
   const handleOrder = () => {
-    const selected =
-      cartProducts && cartProducts.filter((_, index) => checkboxStates[index]);
-    setSelectedProducts(selected);
+    const selected = cartProducts.filter((_, index) => checkboxStates[index]);
 
-    navigate("/order", { state: selected });
+    const selectedProducts = selected.map((product, index) => ({
+      ...product,
+      product_cnt: cnt[index],
+    }));
+
+    navigate("/order", { state: selectedProducts });
   };
 
-  const [selectedSale, setSelectedSale] = useState(true);
-
   const handleDeleteOne = (id) => {
-    const selected = [id];
-    dispatch({
-      type: DELETE_CART_REQUEST,
-      data: {
-        productIds: selected,
-      },
-    });
+    setModalText("이 항목을 삭제하겠습니까?");
+    setOpenConfirmModal(true);
+    setDeletedId(id);
   };
 
   const handleDeleteSelected = () => {
-    const selectedIds =
-      cartLists &&
-      cartLists.reduce((selected, _, index) => {
-        if (checkboxStates[index]) {
-          selected.push(cartLists[index].id);
-        }
-        return selected;
-      }, []);
-    dispatch({
-      type: DELETE_CART_REQUEST,
-      data: {
-        productIds: selectedIds,
-      },
-    });
+    setModalText("선택된 항목을 삭제하겠습니까?");
+    setOpenConfirmModal(true);
   };
 
   const handleDeleteAll = () => {
-    const allIds = cartLists.map((item) => item.id);
-    dispatch({
-      type: DELETE_CART_REQUEST,
-      data: {
-        productIds: allIds,
-      },
-    });
+    setModalText("전체 항목을 삭제하겠습니까?");
+    setOpenConfirmModal(true);
   };
 
   useEffect(() => {
@@ -131,6 +127,47 @@ const Cart = () => {
       });
     }
   }, [dispatch, deleteCartDone, me]);
+
+  const handleClose = () => {
+    setOpenConfirmModal(false);
+  };
+  const handleConfirm = (data) => {
+    if (data === "항목 삭제") {
+      setOpenConfirmModal(false);
+      const selected = [deletedId];
+      dispatch({
+        type: DELETE_CART_REQUEST,
+        data: {
+          productIds: selected,
+        },
+      });
+    } else if (data === "선택된 항목 삭제") {
+      setOpenConfirmModal(false);
+      const selectedIds =
+        cartLists &&
+        cartLists.reduce((selected, _, index) => {
+          if (checkboxStates[index]) {
+            selected.push(cartLists[index].id);
+          }
+          return selected;
+        }, []);
+      dispatch({
+        type: DELETE_CART_REQUEST,
+        data: {
+          productIds: selectedIds,
+        },
+      });
+    } else if (data === "전체 항목 삭제") {
+      setOpenConfirmModal(false);
+      const allIds = cartLists.map((item) => item.id);
+      dispatch({
+        type: DELETE_CART_REQUEST,
+        data: {
+          productIds: allIds,
+        },
+      });
+    }
+  };
 
   return (
     <div className="cart">
@@ -169,6 +206,9 @@ const Cart = () => {
                     <img src={product.product_mainImgSrc} alt="" />
                     <p>{product.product_name}</p>
                     <p>
+                      {Number(product.product_falsePrice).toLocaleString()}원
+                    </p>
+                    <p>
                       {Number(product.product_truePrice).toLocaleString()}원
                     </p>
                     <img
@@ -184,25 +224,10 @@ const Cart = () => {
                         type="number"
                         value={cnt[index]}
                         onChange={(e) => handleCntChange(index, e.target.value)}
+                        min="1"
                       />
                       <p>개</p>
                     </div>
-                  </div>
-                  <div className="sale_box">
-                    <p>
-                      구매혜택
-                      <span>
-                        {(
-                          Number(product.product_truePrice) * 0.1
-                        ).toLocaleString()}
-                        원
-                      </span>{" "}
-                      할인 또는{" "}
-                      {(
-                        Number(product.product_truePrice) * 0.11
-                      ).toLocaleString()}
-                      원 적립
-                    </p>
                   </div>
                 </div>
               );
@@ -218,63 +243,25 @@ const Cart = () => {
           </div>
         </div>
         <div className="pay_container">
-          <div className="login_box">
-            <p>로그인 후 적립 및 할인 혜택을 받으세요.</p>
-            <p>GO ▷</p>
-          </div>
           <div className="pay_box">
             <p>결제 예정 금액</p>
-            <div className="btn_box">
-              <div
-                className="btn"
-                style={{ borderColor: selectedSale ? "#2B746A" : "gray" }}
-                onClick={() => {
-                  setSelectedSale(!selectedSale);
-                }}
-              >
-                <img src="/images/btn_check.png" alt="" />
-                <p>할인</p>
-              </div>
-              <div
-                className="btn"
-                style={{ borderColor: selectedSale ? "gray" : "#2B746A" }}
-                onClick={() => {
-                  setSelectedSale(!selectedSale);
-                }}
-              >
-                <img src="/images/btn_check.png" alt="" />
-                <p>적립</p>
-              </div>
-            </div>
             <div className="price_box">
               <div className="price_title">
                 <p>주문금액</p>
-                <p>적립금액</p>
                 <p>할인금액</p>
               </div>
               <div className="price">
-                <p>{totalPrice && totalPrice.toLocaleString()}</p>
+                <p>{totalFalsePrice && totalFalsePrice.toLocaleString()}</p>
                 <p>
-                  {selectedSale
-                    ? "0"
-                    : totalPrice && (totalPrice * 0.11).toLocaleString()}
-                </p>
-                <p>
-                  -
-                  {!selectedSale
-                    ? "0"
-                    : totalPrice && (totalPrice * 0.1).toLocaleString()}
+                  {totalFalsePrice &&
+                    totalTruePrice &&
+                    (totalFalsePrice - totalTruePrice).toLocaleString()}
                 </p>
               </div>
             </div>
             <div className="total_box">
               <p>총 {totalQuantity}건</p>
-              <p>
-                {selectedSale
-                  ? totalPrice && (totalPrice * 0.9).toLocaleString()
-                  : totalPrice && totalPrice.toLocaleString()}
-                원
-              </p>
+              <p>{totalTruePrice && totalTruePrice.toLocaleString()}원</p>
             </div>
             <div className="order_btn" onClick={handleOrder}>
               주문하기
@@ -282,6 +269,15 @@ const Cart = () => {
           </div>
         </div>
       </div>
+      {openConfirmModal ? (
+        <ConfirmModal
+          data={modalText}
+          onConfirm={handleConfirm}
+          onClose={handleClose}
+        />
+      ) : (
+        ""
+      )}
     </div>
   );
 };

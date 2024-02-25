@@ -8,6 +8,9 @@ const userRouter = require("./routes/user");
 const addProductsRouter = require("./routes/addProducts");
 const productRouter = require("./routes/product");
 const cartRouter = require("./routes/cart");
+const addReviewsRouter = require("./routes/addReviews");
+const reviewRouter = require("./routes/review");
+const adminRouter = require("./routes/admin");
 const db = require("./models");
 const passportConfig = require("./passport");
 const app = express();
@@ -57,6 +60,9 @@ app.use("/user", userRouter);
 app.use("/addProducts", addProductsRouter);
 app.use("/product", productRouter);
 app.use("/cart", cartRouter);
+app.use("/addReviews", addReviewsRouter);
+app.use("/review", reviewRouter);
+app.use("/admin", adminRouter);
 // app.use((err, req, res, next) => {
 //   // 에러 처리 미들웨어
 // });

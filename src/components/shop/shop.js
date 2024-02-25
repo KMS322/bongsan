@@ -9,7 +9,7 @@ const Shop = () => {
   const { products } = useSelector((state) => state.product);
   const navigate = useNavigate();
   const { id } = useParams();
-  const [currentCategory, setCurrentCategory] = useState("1");
+  const [currentCategory, setCurrentCategory] = useState("축하화환");
   useEffect(() => {
     dispatch({
       type: LOAD_PRODUCTS_REQUEST,
@@ -22,73 +22,73 @@ const Shop = () => {
         <p>SHOP</p>
         <div className="category_box">
           <p
-            className={currentCategory === "1" ? "selected" : ""}
+            className={currentCategory === "축하화환" ? "selected" : ""}
             onClick={() => {
-              setCurrentCategory("1");
+              setCurrentCategory("축하화환");
             }}
           >
             축하화환
           </p>
           <p
-            className={currentCategory === "2" ? "selected" : ""}
+            className={currentCategory === "근조화환" ? "selected" : ""}
             onClick={() => {
-              setCurrentCategory("2");
+              setCurrentCategory("근조화환");
             }}
           >
             근조화환
           </p>
           <p
-            className={currentCategory === "3" ? "selected" : ""}
+            className={currentCategory === "관엽" ? "selected" : ""}
             onClick={() => {
-              setCurrentCategory("3");
+              setCurrentCategory("관엽");
             }}
           >
             관엽
           </p>
           <p
-            className={currentCategory === "4" ? "selected" : ""}
+            className={currentCategory === "동양란" ? "selected" : ""}
             onClick={() => {
-              setCurrentCategory("4");
+              setCurrentCategory("동양란");
             }}
           >
             동양란
           </p>
           <p
-            className={currentCategory === "5" ? "selected" : ""}
+            className={currentCategory === "서양란" ? "selected" : ""}
             onClick={() => {
-              setCurrentCategory("5");
+              setCurrentCategory("서양란");
             }}
           >
             서양란
           </p>
           <p
-            className={currentCategory === "6" ? "selected" : ""}
+            className={currentCategory === "분재" ? "selected" : ""}
             onClick={() => {
-              setCurrentCategory("6");
+              setCurrentCategory("분재");
             }}
           >
             분재
           </p>
           <p
-            className={currentCategory === "7" ? "selected" : ""}
+            className={currentCategory === "꽃다발" ? "selected" : ""}
             onClick={() => {
-              setCurrentCategory("7");
+              setCurrentCategory("꽃다발");
             }}
           >
             꽃다발
           </p>
           <p
-            className={currentCategory === "8" ? "selected" : ""}
+            className={currentCategory === "꽃바구니" ? "selected" : ""}
             onClick={() => {
-              setCurrentCategory("8");
+              setCurrentCategory("꽃바구니");
             }}
           >
             꽃바구니
           </p>
           <p
-            className={currentCategory === "9" ? "selected" : ""}
+            className={currentCategory === "행사용상품" ? "selected" : ""}
             onClick={() => {
-              setCurrentCategory("9");
+              setCurrentCategory("행사용상품");
             }}
           >
             행사용상품
@@ -107,7 +107,10 @@ const Shop = () => {
                     key={index}
                   >
                     <div className="img_box">
-                      <img src={product.product_mainImgSrc} alt="" />
+                      <img
+                        src={`/products/${product.product_mainImgSrc}`}
+                        alt=""
+                      />
                     </div>
 
                     <p>{product.product_name}</p>

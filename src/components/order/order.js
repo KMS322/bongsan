@@ -4,9 +4,9 @@ import { useLocation } from "react-router-dom";
 const Order = () => {
   const location = useLocation();
   const { state } = location;
+  console.log("state : ", state);
   const [userName, setUserName] = useState("");
   const [userTel, setUserTel] = useState("");
-  const [userEmail, setUserEmail] = useState("");
   const [receiverName, setReceiverName] = useState("");
   const [receiverTel, setReceiverTel] = useState("");
   const [receiverAddress, setReceiverAddress] = useState("");
@@ -16,17 +16,19 @@ const Order = () => {
   const [deliveryHour, setDeliveryHour] = useState("");
   const [deliveryMinute, setDeliveryMinute] = useState("");
   const [event, setEvent] = useState("");
-  const [eventHour, setEventHour] = useState("");
-  const [eventMinute, setEventMinute] = useState("");
-  const [eventName, setEventName] = useState("");
+  const [checkRibbon, setCheckRibbon] = useState(true);
   const [ribbonLeft, setRibbonLeft] = useState("");
   const [ribbonRight, setRibbonRight] = useState("");
+  const [checkCard, setCheckCard] = useState(true);
   const [cardText, setCardText] = useState("");
-  const [checkEvent, setCheckEvent] = useState(0);
-  const [checkText, setCheckText] = useState(0);
+  const [checkBill, setCheckBill] = useState(false);
+  const [billName, setBillName] = useState("");
+  const [billNumber, setBillNumber] = useState("");
+  const [billEmail, setBillEmail] = useState("");
   const [payOption, setPayOption] = useState("");
   const [agree, setAgree] = useState(false);
-  const [totalPrice, setTotalPrice] = useState(0);
+  const [totalTruePrice, setTotalTruePrice] = useState(0);
+  const [totalFalsePrice, setTotalFalsePrice] = useState(0);
 
   const handleUserName = (e) => {
     setUserName(e.target.value);
@@ -34,9 +36,7 @@ const Order = () => {
   const handleUserTel = (e) => {
     setUserTel(e.target.value);
   };
-  const handleUserEmail = (e) => {
-    setUserEmail(e.target.value);
-  };
+
   const handleReceiverName = (e) => {
     setReceiverName(e.target.value);
   };
@@ -64,15 +64,6 @@ const Order = () => {
   const handleEvent = (e) => {
     setEvent(e.target.value);
   };
-  const handleEventHour = (e) => {
-    setEventHour(e.target.value);
-  };
-  const handleEventMinute = (e) => {
-    setEventMinute(e.target.value);
-  };
-  const handleEventName = (e) => {
-    setEventName(e.target.value);
-  };
   const handleRibbonLeft = (e) => {
     setRibbonLeft(e.target.value);
   };
@@ -82,16 +73,32 @@ const Order = () => {
   const handleCardText = (e) => {
     setCardText(e.target.value);
   };
+  const handleBillName = (e) => {
+    setBillName(e.target.value);
+  };
+  const handleBillNumber = (e) => {
+    setBillNumber(e.target.value);
+  };
+  const handleBillEmail = (e) => {
+    setBillEmail(e.target.value);
+  };
   useEffect(() => {
     if (state && state.length > 0) {
-      const totalPrice =
+      const totalFalsePrice =
         state &&
         state.reduce((acc, product) => {
-          return acc + Number(product.product_truePrice);
+          return acc + Number(product.product_falsePrice) * product.product_cnt;
         }, 0);
-      setTotalPrice(totalPrice);
+      setTotalFalsePrice(totalFalsePrice);
+      const totalTruePrice =
+        state &&
+        state.reduce((acc, product) => {
+          return acc + Number(product.product_truePrice) * product.product_cnt;
+        }, 0);
+      setTotalTruePrice(totalTruePrice);
     }
   }, [state]);
+  const [showTooltip, setShowTooltip] = useState(false);
   return (
     <div className="order">
       <p>주문결제</p>
@@ -102,8 +109,21 @@ const Order = () => {
               return (
                 <div className="product_box" key={index}>
                   <img src={product.product_mainImgSrc} alt="" />
-                  <p>{product.product_name}</p>
-                  <p>{Number(product.product_truePrice).toLocaleString()}원</p>
+                  <p>
+                    {product.product_name} X {product.product_cnt}개
+                  </p>
+                  <p>
+                    {(
+                      Number(product.product_falsePrice) * product.product_cnt
+                    ).toLocaleString()}
+                    원
+                  </p>
+                  <p>
+                    {(
+                      Number(product.product_truePrice) * product.product_cnt
+                    ).toLocaleString()}
+                    원
+                  </p>
                 </div>
               );
             })}
@@ -115,34 +135,58 @@ const Order = () => {
                 value={userName}
                 onChange={handleUserName}
                 placeholder="주문자성명"
+                onFocus={() => setShowTooltip(true)}
+                onBlur={() => setShowTooltip(false)}
               />
+              {showTooltip && (
+                <div
+                  className="text_balloon"
+                  style={{ display: "inline-block", marginLeft: "5px" }}
+                >
+                  커서 갖다댔을 시 생기는 텍스트
+                </div>
+              )}
               <input
                 type="text"
                 value={userTel}
                 onChange={handleUserTel}
                 placeholder="핸드폰"
               />
-              <input
+              <p className="title" style={{ marginTop: "1vw" }}>
+                주문 시 요청사항
+              </p>
+              <textarea
                 type="text"
-                value={userEmail}
-                onChange={handleUserEmail}
-                placeholder="이메일"
+                value={requirement}
+                onChange={handleRequirement}
+                placeholder="요청사항"
               />
               <p className="title" style={{ marginTop: "2vw" }}>
                 배송 정보
               </p>
-              <input
-                type="text"
-                value={receiverName}
-                onChange={handleReceiverName}
-                placeholder="받으시는분"
-              />
+              <div className="receiver_box">
+                <input
+                  type="text"
+                  value={receiverName}
+                  onChange={handleReceiverName}
+                  placeholder="받으시는분"
+                />
+                <select value={event} onChange={handleEvent}>
+                  <option value="">선택</option>
+                  <option value="신랑측">신랑측</option>
+                  <option value="신부측">신부측</option>
+                  <option value="상주">상주</option>
+                  <option value="고인">고인</option>
+                </select>
+              </div>
+
               <input
                 type="text"
                 value={receiverTel}
                 onChange={handleReceiverTel}
                 placeholder="핸드폰번호"
               />
+
               <div className="address_box">
                 <input
                   type="text"
@@ -164,22 +208,75 @@ const Order = () => {
                 <br />
                 (추가 배송비는 상품 하나씩 각각 부과됩니다.)
               </p>
-              <p className="title" style={{ marginTop: "2vw" }}>
-                주문 시 요청사항
-              </p>
-              <textarea
-                type="text"
-                value={requirement}
-                onChange={handleRequirement}
-                placeholder="요청사항"
-              />
+
               <p className="add_text">
                 행사 또는 예식의 경우 필히 시간을 기입하시고, 케익주문시 초의
                 갯수를 입력하세요.
               </p>
+              <p className="title" style={{ marginTop: "2vw" }}>
+                계산서 발행
+              </p>
+              <div className="event_radio_box">
+                <div
+                  className="radio_box"
+                  onClick={() => {
+                    setCheckBill(true);
+                  }}
+                >
+                  <img
+                    src={
+                      checkBill
+                        ? "/images/radio_on.png"
+                        : "/images/radio_off.png"
+                    }
+                    alt=""
+                  />
+                  <p>필요</p>
+                </div>
+                <div
+                  className="radio_box"
+                  onClick={() => {
+                    setCheckBill(false);
+                  }}
+                >
+                  <img
+                    src={
+                      checkBill
+                        ? "/images/radio_off.png"
+                        : "/images/radio_on.png"
+                    }
+                    alt=""
+                  />
+                  <p>불필요</p>
+                </div>
+              </div>
+              {checkBill ? (
+                <>
+                  <input
+                    type="text"
+                    value={billName}
+                    onChange={handleBillName}
+                    placeholder="사업자 대표명"
+                  />
+                  <input
+                    type="text"
+                    value={billNumber}
+                    onChange={handleBillNumber}
+                    placeholder="사업자등록번호"
+                  />
+                  <input
+                    type="text"
+                    value={billEmail}
+                    onChange={handleBillEmail}
+                    placeholder="이메일"
+                  />
+                </>
+              ) : (
+                ""
+              )}
             </div>
             <div className="right_box">
-              <p className="title">희망 배송 시간</p>
+              <p className="title">행사 시작 시간(도착 희망 시간)</p>
               <div className="select_box">
                 <input
                   type="text"
@@ -215,9 +312,9 @@ const Order = () => {
                 </select>
                 <select value={event} onChange={handleEvent}>
                   <option value="">선택</option>
-                  <option value="까지">까지</option>
-                  <option value="예식">예식</option>
-                  <option value="행사">행사</option>
+                  <option value="예식 시작">예식 시작</option>
+                  <option value="행사 시작">행사 시작</option>
+                  <option value="까지 도착">까지 도착</option>
                 </select>
               </div>
               <p className="select_text">
@@ -234,178 +331,103 @@ const Order = () => {
                 행사시간 기입하시고 꼭 전화부탁드립니다!
               </p>
               <p className="title" style={{ marginTop: "2vw" }}>
-                결혼식 정보
+                리본 문구
               </p>
               <div className="event_radio_box">
                 <div
                   className="radio_box"
                   onClick={() => {
-                    setCheckEvent(0);
+                    setCheckRibbon(true);
                   }}
                 >
                   <img
                     src={
-                      checkEvent === 0
+                      checkRibbon
                         ? "/images/radio_on.png"
                         : "/images/radio_off.png"
                     }
                     alt=""
                   />
-                  <p>해당없음</p>
+                  <p>선택</p>
                 </div>
                 <div
                   className="radio_box"
                   onClick={() => {
-                    setCheckEvent(1);
+                    setCheckRibbon(false);
                   }}
                 >
                   <img
                     src={
-                      checkEvent === 1
-                        ? "/images/radio_on.png"
-                        : "/images/radio_off.png"
+                      checkRibbon
+                        ? "/images/radio_off.png"
+                        : "/images/radio_on.png"
                     }
                     alt=""
                   />
-                  <p>신랑측</p>
-                </div>
-                <div
-                  className="radio_box"
-                  onClick={() => {
-                    setCheckEvent(2);
-                  }}
-                >
-                  <img
-                    src={
-                      checkEvent === 2
-                        ? "/images/radio_on.png"
-                        : "/images/radio_off.png"
-                    }
-                    alt=""
-                  />
-                  <p>신부측</p>
+                  <p>미선택</p>
                 </div>
               </div>
-              {checkEvent === 0 ? (
-                ""
-              ) : (
+              {checkRibbon ? (
                 <>
-                  <p className="eventTime">예식시간</p>
-                  <div className="event_box">
-                    <select value={eventHour} onChange={handleEventHour}>
-                      <option value="">시</option>
-                      <option value="10">10</option>
-                      <option value="11">11</option>
-                      <option value="12">12</option>
-                      <option value="13">13</option>
-                      <option value="14">14</option>
-                      <option value="15">15</option>
-                      <option value="16">16</option>
-                      <option value="17">17</option>
-                      <option value="18">18</option>
-                      <option value="19">19</option>
-                      <option value="20">20</option>
-                      <option value="21">21</option>
-                      <option value="22">22</option>
-                      <option value="23">23</option>
-                    </select>
-                    <select value={eventMinute} onChange={handleEventMinute}>
-                      <option value="">분</option>
-                      <option value="00">00</option>
-                      <option value="10">10</option>
-                      <option value="20">20</option>
-                      <option value="30">30</option>
-                      <option value="40">40</option>
-                      <option value="50">50</option>
-                    </select>
-                  </div>
-                  <input
-                    type="text"
-                    value={eventName}
-                    onChange={handleEventName}
-                    placeholder="신랑, 신부, 혼주 성명"
-                  />
-                  <p className="input_text">
-                    혼주 OOO, 신랑 OOO, 신부 OOO으로 기재부탁드립니다.
-                  </p>
-                </>
-              )}
-
-              <p className="title" style={{ marginTop: "2vw" }}>
-                리본/카드문구
-              </p>
-              <div className="event_radio_box">
-                <div
-                  className="radio_box"
-                  onClick={() => {
-                    setCheckText(0);
-                  }}
-                >
-                  <img
-                    src={
-                      checkText === 0
-                        ? "/images/radio_on.png"
-                        : "/images/radio_off.png"
-                    }
-                    alt=""
-                  />
-                  <p>리본</p>
-                </div>
-                <div
-                  className="radio_box"
-                  onClick={() => {
-                    setCheckText(1);
-                  }}
-                >
-                  <img
-                    src={
-                      checkText === 1
-                        ? "/images/radio_on.png"
-                        : "/images/radio_off.png"
-                    }
-                    alt=""
-                  />
-                  <p>카드</p>
-                </div>
-                <div
-                  className="radio_box"
-                  onClick={() => {
-                    setCheckText(2);
-                  }}
-                >
-                  <img
-                    src={
-                      checkText === 2
-                        ? "/images/radio_on.png"
-                        : "/images/radio_off.png"
-                    }
-                    alt=""
-                  />
-                  <p>선택안함</p>
-                </div>
-              </div>
-              {checkText === 0 ? (
-                <>
-                  {" "}
                   <input
                     type="text"
                     value={ribbonLeft}
                     onChange={handleRibbonLeft}
-                    placeholder="보내는 분 (왼쪽)"
+                    placeholder="보내는 사람_왼쪽"
                   />
                   <input
                     type="text"
                     value={ribbonRight}
                     onChange={handleRibbonRight}
-                    placeholder="경조사어 (오른쪽)"
+                    placeholder="경조 메세지_오른쪽"
                   />
                 </>
-              ) : checkText === 1 ? (
+              ) : (
+                ""
+              )}
+              <p className="title" style={{ marginTop: "2vw" }}>
+                카드 문구
+              </p>
+              <div className="event_radio_box">
+                <div
+                  className="radio_box"
+                  onClick={() => {
+                    setCheckCard(true);
+                  }}
+                >
+                  <img
+                    src={
+                      checkCard
+                        ? "/images/radio_on.png"
+                        : "/images/radio_off.png"
+                    }
+                    alt=""
+                  />
+                  <p>선택</p>
+                </div>
+                <div
+                  className="radio_box"
+                  onClick={() => {
+                    setCheckCard(false);
+                  }}
+                >
+                  <img
+                    src={
+                      checkCard
+                        ? "/images/radio_off.png"
+                        : "/images/radio_on.png"
+                    }
+                    alt=""
+                  />
+                  <p>미선택</p>
+                </div>
+              </div>
+              {checkCard ? (
                 <textarea
                   type="text"
                   value={cardText}
                   onChange={handleCardText}
-                  placeholder="카드메시지"
+                  placeholder="작성내용"
                 />
               ) : (
                 ""
@@ -414,10 +436,6 @@ const Order = () => {
           </div>
         </div>
         <div className="pay_container">
-          <div className="login_box">
-            <p>로그인 후 적립 및 할인 혜택을 받으세요.</p>
-            <p>GO ▷</p>
-          </div>
           <div className="pay_box">
             <p className="title" style={{ marginTop: "2vw" }}>
               결제 방법
@@ -506,18 +524,16 @@ const Order = () => {
             <div className="price_box">
               <div className="price_title">
                 <p>주문금액</p>
-                <p>적립금액</p>
                 <p>할인금액</p>
               </div>
               <div className="price">
-                <p>{totalPrice.toLocaleString()}원</p>
-                <p>0원</p>
-                <p>-{(totalPrice * 0.1).toLocaleString()}원</p>
+                <p>{totalFalsePrice.toLocaleString()}원</p>
+                <p>-{(totalFalsePrice - totalTruePrice).toLocaleString()}원</p>
               </div>
             </div>
             <div className="total_box">
               <p>총 결제금액</p>
-              <p>{totalPrice.toLocaleString()}원</p>
+              <p>{totalTruePrice.toLocaleString()}원</p>
             </div>
             <div
               className="argree_box"

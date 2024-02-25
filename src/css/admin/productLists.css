@@ -1,0 +1,25 @@
+/* productLists */
+.productLists .table_container .row p:nth-child(1) {
+  margin-left: 2vw;
+  width: 3%;
+}
+.productLists .table_container .row p:nth-child(2) {
+  margin-left: 2vw;
+  width: 8%;
+}
+.productLists .table_container .row p:nth-child(3) {
+  margin-left: 2vw;
+  width: 25%;
+}
+.productLists .table_container .row p:nth-child(4) {
+  margin-left: 2vw;
+  width: 10%;
+}
+.productLists .table_container .row p:nth-child(5) {
+  margin-left: 2vw;
+  width: 10%;
+}
+.productLists .table_container .row p:nth-child(6) {
+  margin-left: 2vw;
+  width: 30%;
+}

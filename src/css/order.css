@@ -35,21 +35,23 @@
   margin-left: 2vw;
 }
 .order .article_container .order_container .product_box p:nth-child(2) {
-  width: 65%;
+  width: 40%;
   font-size: 1vw;
   font-weight: 500;
   margin-left: 1.5vw;
+  margin-right: 6vw;
 }
 .order .article_container .order_container .product_box p:nth-child(3) {
   font-size: 1vw;
+  color: gray;
+  text-decoration: line-through;
+  margin-right: 1vw;
+}
+.order .article_container .order_container .product_box p:nth-child(4) {
+  font-size: 1vw;
   font-weight: 600;
 }
-.order .article_container .order_container .product_box img:nth-child(5) {
-  width: 1vw;
-  height: 1vw;
-  cursor: pointer;
-  margin-left: 1.5vw;
-}
+
 .order .article_container .order_container .order_box {
   width: 100%;
   height: auto;
@@ -73,6 +75,37 @@
   margin-top: 0.5vw;
   border: none;
   border: 1px solid gray;
+}
+
+.order .article_container .order_container .order_box .left_box .receiver_box {
+  width: 100%;
+  height: 2vw;
+  display: flex;
+  justify-content: space-between;
+  margin-top: 0.5vw;
+}
+.order
+  .article_container
+  .order_container
+  .order_box
+  .left_box
+  .receiver_box
+  input {
+  width: 80%;
+  height: 100%;
+  margin: 0;
+}
+.order
+  .article_container
+  .order_container
+  .order_box
+  .left_box
+  .receiver_box
+  select {
+  width: 18%;
+  height: 100%;
+  font-size: 0.8vw;
+  font-weight: 600;
 }
 .order .article_container .order_container .order_box .left_box .address_box {
   width: 100%;
@@ -126,6 +159,52 @@
   font-size: 0.7vw;
   line-height: 0.8vw;
   color: #2b746a;
+}
+.order
+  .article_container
+  .order_container
+  .order_box
+  .left_box
+  .event_radio_box {
+  width: 100%;
+  height: 1vw;
+  display: flex;
+  margin-top: 0.7vw;
+}
+.order
+  .article_container
+  .order_container
+  .order_box
+  .left_box
+  .event_radio_box
+  .radio_box {
+  width: auto;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  margin-right: 1vw;
+}
+.order
+  .article_container
+  .order_container
+  .order_box
+  .left_box
+  .event_radio_box
+  .radio_box
+  img {
+  width: 1vw;
+
+  margin-right: 0.5vw;
+}
+.order
+  .article_container
+  .order_container
+  .order_box
+  .left_box
+  .event_radio_box
+  .radio_box
+  p {
+  font-size: 0.8vw;
 }
 .order .article_container .order_container .order_box .right_box {
   width: 48%;
@@ -262,18 +341,7 @@
   width: 30%;
   height: auto;
 }
-.order .article_container .pay_container .login_box {
-  width: 100%;
-  height: 2vw;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0.5vw;
-  background-color: #2b746a;
-}
-.order .article_container .pay_container .login_box p {
-  color: white;
-}
+
 .order .article_container .pay_container .pay_box {
   width: 100%;
   height: auto;

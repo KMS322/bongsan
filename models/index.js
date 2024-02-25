@@ -13,6 +13,7 @@ const sequelize = new Sequelize(
 db.User = require("./user")(sequelize, Sequelize);
 db.Product = require("./product")(sequelize, Sequelize);
 db.Cart = require("./cart")(sequelize, Sequelize);
+db.Review = require("./review")(sequelize, Sequelize);
 
 Object.keys(db).forEach((modelName) => {
   if (db[modelName].associate) {

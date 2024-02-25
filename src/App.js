@@ -10,12 +10,14 @@ import Signin from "./components/signin/signin";
 import Detail from "./components/shop/detail";
 import Cart from "./components/cart/cart";
 import Order from "./components/order/order";
-import { useDispatch, useSelector } from "react-redux";
+import Review from "./components/review/review";
+import { useDispatch } from "react-redux";
 import { LOAD_MY_INFO_REQUEST } from "./reducers/user";
 import { LOAD_PRODUCTS_REQUEST } from "./reducers/product";
+import { LOAD_REVIEWS_REQUEST } from "./reducers/review";
+import Main from "./adminComponents/main";
 function App() {
   const dispatch = useDispatch();
-  const { products } = useSelector((state) => state.product);
   useEffect(() => {
     dispatch({
       type: LOAD_MY_INFO_REQUEST,
@@ -24,6 +26,11 @@ function App() {
   useEffect(() => {
     dispatch({
       type: LOAD_PRODUCTS_REQUEST,
+    });
+  }, []);
+  useEffect(() => {
+    dispatch({
+      type: LOAD_REVIEWS_REQUEST,
     });
   }, []);
   return (
@@ -38,6 +45,8 @@ function App() {
         <Route path="/detail/:id" element={<Detail />} />
         <Route path="/cart" element={<Cart />} />
         <Route path="/order" element={<Order />} />
+        <Route path="/review" element={<Review />} />
+        <Route path="/admin" element={<Main />} />
       </Routes>
       <Footer />
     </>
