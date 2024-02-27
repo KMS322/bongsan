@@ -162,4 +162,16 @@ router.post("/deleteReview", async (req, res, next) => {
   }
 });
 
+router.get("/downList", (req, res) => {
+  try {
+    const fileName = "products.xlsx";
+    const filePath = path.join(__dirname, fileName); // 현재 스크립트가 위치한 디렉토리를 기준으로 파일의 상대 경로 설정
+    console.log("filePath : ", filePath);
+    res.setHeader("Content-Disposition", `attachment; filename=${fileName}`);
+    res.sendFile(filePath);
+  } catch (error) {
+    console.error("파일 다운로드 중 에러가 발생했습니다:", error);
+    res.status(500).send("파일을 다운로드하는 도중 에러가 발생했습니다.");
+  }
+});
 module.exports = router;

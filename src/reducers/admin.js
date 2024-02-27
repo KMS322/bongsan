@@ -86,6 +86,7 @@ const reducer = (state = initialState, action) => {
         draft.deleteReviewLoading = false;
         draft.deleteReviewError = action.error;
         break;
+
       default:
         return state;
     }

@@ -8,7 +8,7 @@ module.exports = (sequelize, DataTypes) => {
       },
       user_id: {
         type: DataTypes.STRING(10),
-        allowNull: true,
+        allowNull: false,
       },
       product_cnt: {
         type: DataTypes.STRING(10),

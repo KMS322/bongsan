@@ -84,10 +84,12 @@
   color: gray;
   text-decoration: line-through;
   margin-right: 1vw;
+  letter-spacing: -0.05vw;
 }
 .cart .article_container .cart_container .cart_box .content_box p:nth-child(5) {
   font-size: 1vw;
   font-weight: 600;
+  letter-spacing: -0.05vw;
 }
 .cart
   .article_container
@@ -130,6 +132,7 @@
   width: 3vw;
   height: 100%;
   margin-left: 1vw;
+  font-size: 0.8vw;
   text-align: center;
 }
 .cart .article_container .cart_container .btn_box {

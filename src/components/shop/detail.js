@@ -76,7 +76,7 @@ const Detail = () => {
         </div>
         <div className="article_container">
           <div className="detail_container">
-            <img src={product.product_mainImgSrc} alt="" />
+            <img src={`/products/${product.product_mainImgSrc}`} alt="" />
             {[...Array(8)].map((_, index) => (
               <img
                 key={index}

@@ -12,6 +12,8 @@ const Signin = () => {
   );
   const [userID, onChangeId] = useInput("");
   const [userPW, onChangePW] = useInput("");
+  const [pwVisible, setPwVisible] = useState(false);
+  const [pwCheckVisible, setPwCheckVisible] = useState(false);
   const [userName, onChangeUserName] = useInput("");
   const [userEmail, onChangeUserEmail] = useInput("");
   const [userTel, onChangeUserTel] = useInput("");
@@ -125,11 +127,20 @@ const Signin = () => {
         </label>
         <label className="input_box">
           <input
-            type="password"
+            type={pwVisible ? "text" : "password"}
             name="userPW"
             value={userPW}
             onChange={onChangePW}
             placeholder="비밀번호"
+          />
+          <img
+            src={
+              pwVisible
+                ? "/images/btn_pwVisible.png"
+                : "/images/btn_pwinVisible.png"
+            }
+            onClick={() => setPwVisible(!pwVisible)}
+            alt=""
           />
         </label>
         <label
@@ -137,11 +148,20 @@ const Signin = () => {
           style={{ marginBottom: passwordError ? "" : "1.6vw" }}
         >
           <input
-            type="password"
+            type={pwCheckVisible ? "text" : "password"}
             name="userPWCheck"
             value={passwordCheck}
             onChange={onChangePasswordCheck}
             placeholder="비밀번호 확인"
+          />
+          <img
+            src={
+              pwCheckVisible
+                ? "/images/btn_pwVisible.png"
+                : "/images/btn_pwinVisible.png"
+            }
+            onClick={() => setPwCheckVisible(!pwCheckVisible)}
+            alt=""
           />
         </label>
         {passwordError && (

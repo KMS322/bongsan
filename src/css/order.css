@@ -56,6 +56,7 @@
   width: 100%;
   height: auto;
   margin-top: 4vw;
+  margin-bottom: 4vw;
   display: flex;
   justify-content: space-between;
 }
@@ -154,6 +155,7 @@
   height: 5vw;
   margin-top: 0.5vw;
   padding: 0.5vw;
+  font-size: 0.8vw;
 }
 .order .article_container .order_container .order_box .left_box .add_text {
   font-size: 0.7vw;
@@ -244,6 +246,7 @@
   width: 19%;
   font-weight: 600;
   height: 100%;
+  font-size: 0.8vw;
 }
 .order .article_container .order_container .order_box .right_box .select_text {
   font-size: 0.7vw;
@@ -302,23 +305,7 @@
   color: gray;
   margin-top: 0.6vw;
 }
-.order .article_container .order_container .order_box .right_box .event_box {
-  width: 100%;
-  height: 2vw;
-  display: flex;
-  justify-content: space-between;
-  margin-top: 0.7vw;
-}
-.order
-  .article_container
-  .order_container
-  .order_box
-  .right_box
-  .event_box
-  select {
-  width: 48%;
-  height: 100%;
-}
+
 .order .article_container .order_container .order_box .right_box > input {
   width: 100%;
   height: 2vw;
@@ -336,6 +323,7 @@
   height: 8vw;
   margin-top: 1vw;
   padding: 0.5vw;
+  font-size: 0.8vw;
 }
 .order .article_container .pay_container {
   width: 30%;

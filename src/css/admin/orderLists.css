@@ -1,0 +1,9 @@
+/* orderLists */
+.orderLists .download_btn {
+  width: 5vw;
+  height: 2vw;
+  cursor: pointer;
+  font-size: 1vw;
+  margin-left: 2vw;
+  border: 1px solid red;
+}

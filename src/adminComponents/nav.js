@@ -37,6 +37,16 @@ const Nav = ({ onSelectMenu }) => {
       >
         배송후기 등록/삭제
       </p>
+      <p
+        onClick={() => {
+          handleSubMenuClick("주문목록");
+        }}
+        style={{
+          color: selectedMenu === "주문목록" ? "lightgreen" : "white",
+        }}
+      >
+        주문목록
+      </p>
     </div>
   );
 };

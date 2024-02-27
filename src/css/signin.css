@@ -26,6 +26,7 @@
   align-items: center;
   justify-content: space-between;
   margin-bottom: 1.6vw;
+  position: relative;
 }
 .singin .input_box_container .input_box:first-child {
   display: flex;
@@ -55,6 +56,15 @@
   height: 100%;
   font-size: 1vw;
   padding-left: 0.5vw;
+}
+.singin .input_box_container .input_box img {
+  width: 1.8vw;
+  cursor: pointer;
+  position: absolute;
+  top: 50%;
+  right: 1vw;
+  transform: translate(0, -50%);
+  opacity: 0.3;
 }
 .singin .check_container {
   width: 25%;

@@ -1,5 +1,5 @@
 import "../../css/login.css";
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import useInput from "../hooks/useInput";
 import { useDispatch, useSelector } from "react-redux";
@@ -10,7 +10,7 @@ const Login = () => {
   const navigate = useNavigate();
   const [userID, onChangeId] = useInput("");
   const [userPW, onChangePW] = useInput("");
-
+  const [pwVisible, setPwVisible] = useState(false);
   useEffect(() => {
     if (logInError) {
       alert(logInError);
@@ -52,11 +52,20 @@ const Login = () => {
         </label>
         <label className="input_box">
           <input
-            type="password"
+            type={pwVisible ? "text" : "password"}
             name="userPW"
             value={userPW}
             onChange={onChangePW}
             placeholder="비밀번호"
+          />
+          <img
+            src={
+              pwVisible
+                ? "/images/btn_pwVisible.png"
+                : "/images/btn_pwinVisible.png"
+            }
+            onClick={() => setPwVisible(!pwVisible)}
+            alt=""
           />
         </label>
       </form>

@@ -4,6 +4,7 @@ import Nav from "./nav";
 import ProductLists from "./productLists";
 import ProductManage from "./productManage";
 import ReviewManage from "./reviewManange";
+import OrderLists from "./orderLists";
 const Main = () => {
   const [currentComponent, setCurrentComponent] = useState("상품 목록");
   const handleMenuSelect = (selectedMenu) => {
@@ -19,6 +20,9 @@ const Main = () => {
       break;
     case "배송후기 등록/삭제":
       selectedComponent = <ReviewManage />;
+      break;
+    case "주문목록":
+      selectedComponent = <OrderLists />;
       break;
     default:
       selectedComponent = null;

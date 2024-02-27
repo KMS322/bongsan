@@ -203,7 +203,10 @@ const Cart = () => {
                         setCheckboxStates(newState);
                       }}
                     />
-                    <img src={product.product_mainImgSrc} alt="" />
+                    <img
+                      src={`/products/${product.product_mainImgSrc}`}
+                      alt=""
+                    />
                     <p>{product.product_name}</p>
                     <p>
                       {Number(product.product_falsePrice).toLocaleString()}원
