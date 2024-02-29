@@ -32,6 +32,7 @@ const Board = () => {
               <div className="article" key={index}>
                 <img src={`reviews/${review.review_imgSrc}`} alt="" />
                 <p>{review.review_name}</p>
+                <p>{review.review_orderer}</p>
                 <p>{dayjs(review.createdAt).format("YYYY-MM-DD")}</p>
               </div>
             );
@@ -49,6 +50,7 @@ const Board = () => {
                 onClick={() => {
                   setCurrentPage(index);
                 }}
+                key={index}
               >
                 {index + 1}
               </p>

@@ -21,7 +21,7 @@
 }
 .review .article_container .article {
   width: 22.75%;
-  height: 25vw;
+  height: 26vw;
   margin-right: 3%;
   display: flex;
   flex-direction: column;
@@ -41,6 +41,9 @@
   font-weight: 600;
 }
 .review .article_container .article p:nth-child(3) {
+  font-size: 1vw;
+}
+.review .article_container .article p:nth-child(4) {
   font-size: 0.9vw;
   margin-bottom: 1vw;
 }

@@ -115,10 +115,10 @@ router.post(
 );
 
 router.post("/addReview", async (req, res, next) => {
-  console.log("req.body :", req.body);
   try {
     await Review.create({
       review_name: req.body.reviewName,
+      review_orderer: req.body.reviewOrderer,
       review_imgSrc: req.body.reviewImgSrc,
     });
 

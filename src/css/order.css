@@ -9,6 +9,9 @@
   font-weight: 600;
   margin-top: 3vw;
 }
+.order sup {
+  color: red;
+}
 .order .article_container {
   width: 100%;
   height: auto;
@@ -162,52 +165,6 @@
   line-height: 0.8vw;
   color: #2b746a;
 }
-.order
-  .article_container
-  .order_container
-  .order_box
-  .left_box
-  .event_radio_box {
-  width: 100%;
-  height: 1vw;
-  display: flex;
-  margin-top: 0.7vw;
-}
-.order
-  .article_container
-  .order_container
-  .order_box
-  .left_box
-  .event_radio_box
-  .radio_box {
-  width: auto;
-  display: flex;
-  align-items: center;
-  cursor: pointer;
-  margin-right: 1vw;
-}
-.order
-  .article_container
-  .order_container
-  .order_box
-  .left_box
-  .event_radio_box
-  .radio_box
-  img {
-  width: 1vw;
-
-  margin-right: 0.5vw;
-}
-.order
-  .article_container
-  .order_container
-  .order_box
-  .left_box
-  .event_radio_box
-  .radio_box
-  p {
-  font-size: 0.8vw;
-}
 .order .article_container .order_container .order_box .right_box {
   width: 48%;
   height: 40vw;
@@ -230,7 +187,7 @@
   .right_box
   .select_box
   input {
-  width: 40%;
+  width: 35%;
   height: 100%;
   font-size: 0.9vw;
   font-weight: 600;
@@ -243,10 +200,19 @@
   .right_box
   .select_box
   select {
-  width: 19%;
+  width: 15%;
   font-weight: 600;
   height: 100%;
   font-size: 0.8vw;
+}
+.order
+  .article_container
+  .order_container
+  .order_box
+  .right_box
+  .select_box
+  select:last-child {
+  width: 25%;
 }
 .order .article_container .order_container .order_box .right_box .select_text {
   font-size: 0.7vw;
@@ -326,10 +292,15 @@
   font-size: 0.8vw;
 }
 .order .article_container .pay_container {
-  width: 30%;
+  /* width: 30%; */
+  width: 21vw;
   height: auto;
 }
-
+/* .order .article_container .fixed_container {
+  position: fixed;
+  top: 0.2vw;
+  right: 15%;
+} */
 .order .article_container .pay_container .pay_box {
   width: 100%;
   height: auto;
@@ -373,6 +344,46 @@
 }
 .order .article_container .pay_container .pay_box .payOption_box .payOption p {
   font-size: 0.8vw;
+}
+.order .article_container .pay_container .pay_box .event_radio_box {
+  width: 100%;
+  height: 1vw;
+  display: flex;
+  margin-top: 0.7vw;
+}
+.order .article_container .pay_container .pay_box .event_radio_box .radio_box {
+  width: auto;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  margin-right: 1vw;
+}
+.order
+  .article_container
+  .pay_container
+  .pay_box
+  .event_radio_box
+  .radio_box
+  img {
+  width: 1vw;
+  margin-right: 0.5vw;
+}
+.order
+  .article_container
+  .pay_container
+  .pay_box
+  .event_radio_box
+  .radio_box
+  p {
+  font-size: 0.8vw;
+}
+.order .article_container .pay_container .pay_box input {
+  width: 100%;
+  height: 2vw;
+  margin-top: 0.7vw;
+  font-size: 0.9vw;
+  padding-left: 0.5vw;
+  background-color: rgb(238, 238, 238);
 }
 .order .article_container .pay_container .pay_box .price_box {
   width: 100%;

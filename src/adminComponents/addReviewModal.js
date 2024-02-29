@@ -6,10 +6,14 @@ import { ADD_REVIEW_REQUEST } from "../reducers/admin";
 const AddModal = ({ onClose }) => {
   const dispatch = useDispatch();
   const [reviewName, setReviewName] = useState("");
+  const [reviewOrderer, setReviewOrderer] = useState("");
   const [reviewImgSrc, setReviewImgSrc] = useState(null);
 
   const handleName = (e) => {
     setReviewName(e.target.value);
+  };
+  const handleOrderer = (e) => {
+    setReviewOrderer(e.target.value);
   };
   const handleFileChange = (e) => {
     const file = e.target.files[0];
@@ -38,6 +42,7 @@ const AddModal = ({ onClose }) => {
           type: ADD_REVIEW_REQUEST,
           data: {
             reviewName,
+            reviewOrderer,
             reviewImgSrc: fileName,
           },
         });
@@ -54,6 +59,10 @@ const AddModal = ({ onClose }) => {
       <div className="input_box">
         <p>상품명</p>
         <input type="text" value={reviewName} onChange={handleName} />
+      </div>
+      <div className="input_box">
+        <p>주문자</p>
+        <input type="text" value={reviewOrderer} onChange={handleOrderer} />
       </div>
       <div className="input_box">
         <p>썸네일 등록</p>

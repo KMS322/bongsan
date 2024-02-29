@@ -31,13 +31,13 @@
 .detail .article_container .content_container {
   width: 40%;
 }
-/* .detail .article_container .content_container .tag_box {
+.detail .article_container .content_container .tag_box {
   display: flex;
 }
 .detail .article_container .content_container .tag_box p {
   font-size: 0.9vw;
   margin-right: 1vw;
-} */
+}
 .detail .article_container .content_container .name_box {
   width: 100%;
   height: 3vw;
@@ -75,9 +75,10 @@
 }
 .detail .article_container .content_container .code_box {
   width: 100%;
-  height: 4vw;
+  height: auto;
   margin-top: 1vw;
   display: flex;
+  justify-content: space-between;
 }
 .detail .article_container .content_container .code_box .title_box {
   width: 22%;
@@ -90,88 +91,60 @@
   font-weight: 600;
 }
 .detail .article_container .content_container .code_box .content_box {
-  width: 70%;
+  width: 78%;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
 }
+.detail
+  .article_container
+  .content_container
+  .code_box
+  .content_box
+  .content_text_box {
+  display: flex;
+  flex-wrap: wrap;
+}
 .detail .article_container .content_container .code_box .content_box p {
+  width: auto;
+  font-size: 0.8vw;
+  line-height: 1vw;
+  color: gray;
+}
+.detail
+  .article_container
+  .content_container
+  .code_box
+  .content_box
+  .content_text_box
+  p {
+  width: auto;
+  height: 1vw;
   font-size: 0.8vw;
   color: gray;
+  border: 1px solid red;
+}
+.detail
+  .article_container
+  .content_container
+  .code_box
+  .content_box
+  .content_text_box {
+  display: flex;
 }
 .detail .article_container .content_container .notice {
   height: 6vw;
   margin-top: 1vw;
   font-size: 0.8vw;
   color: gray;
-  letter-spacing: -0.05vw;
+  letter-spacing: -0.07vw;
   line-height: 1.1vw;
   border-bottom: 1px solid rgb(211, 211, 211);
 }
 .detail .article_container .content_container .notice span {
   color: #2b746a;
 }
-.detail .article_container .content_container .select_box {
-  width: 100%;
-  height: 5vw;
-  margin-top: 1.5vw;
-  border-bottom: 1px solid rgb(211, 211, 211);
-}
-.detail .article_container .content_container .select_box p {
-  font-size: 0.9vw;
-  font-weight: 600;
-}
-.detail .article_container .content_container .select_box select {
-  width: 100%;
-  height: 2.5vw;
-  font-size: 0.8vw;
-  padding-left: 0.7vw;
-  margin-top: 0.5vw;
-}
-.detail .article_container .content_container .option_box {
-  width: 100%;
-  height: 5vw;
-  margin-top: 1vw;
-  padding: 1vw;
-  background-color: rgb(238, 238, 238);
-}
-.detail .article_container .content_container .option_box .option_text_box {
-  height: 1.5vw;
-  display: flex;
-  justify-content: space-between;
-  border-bottom: 1px solid rgb(211, 211, 211);
-}
-.detail .article_container .content_container .option_box .option_text_box p {
-  font-size: 0.9vw;
-  font-weight: 600;
-}
-.detail .article_container .content_container .option_box .option_price_box {
-  display: flex;
-}
-.detail
-  .article_container
-  .content_container
-  .option_box
-  .option_price_box
-  p:last-child {
-  text-decoration: line-through;
-  color: gray;
-  margin-left: 1vw;
-}
-.detail .article_container .content_container .option_box .option_select_box {
-  width: 50%;
-  height: 1.3vw;
-  margin-top: 0.5vw;
-}
-.detail
-  .article_container
-  .content_container
-  .option_box
-  .option_select_box
-  select {
-  width: 100%;
-  height: 100%;
-}
+
 .detail .article_container .content_container .cnt_box {
   width: 100%;
   height: 3vw;

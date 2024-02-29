@@ -9,11 +9,12 @@ const Order = () => {
   const [formData, setFormData] = useState({
     userName: [],
     userTel: [],
+    requirement: [],
     receiverName: [],
     receiverTel: [],
     receiverAddress: [],
     receiverDetailAddress: [],
-    requirement: [],
+    receiverPosition: [],
     deliveryDate: [],
     deliveryHour: [],
     deliveryMinute: [],
@@ -31,8 +32,30 @@ const Order = () => {
   });
   const [payOption, setPayOption] = useState("");
   const [agree, setAgree] = useState(false);
+  const [checkBill, setCheckBill] = useState(false);
+  const [billName, setBillName] = useState("");
+  const [billNumber, setBillNumber] = useState("");
+  const [billEmail, setBillEmail] = useState("");
   const [totalTruePrice, setTotalTruePrice] = useState(0);
   const [totalFalsePrice, setTotalFalsePrice] = useState(0);
+  // const [isScrolled, setIsScrolled] = useState(false);
+
+  // useEffect(() => {
+  //   const handleScroll = () => {
+  //     if (window.scrollY >= (10 * window.innerWidth) / 100) {
+  //       setIsScrolled(true);
+  //     } else {
+  //       setIsScrolled(false);
+  //     }
+  //   };
+
+  //   window.addEventListener("scroll", handleScroll);
+
+  //   return () => {
+  //     window.removeEventListener("scroll", handleScroll);
+  //   };
+  // }, []);
+
   const handleComplete = (data, index) => {
     const updatedFormData = { ...formData };
     updatedFormData.receiverAddress[index] = data.address;
@@ -47,12 +70,31 @@ const Order = () => {
     }
     setFormData(updatedFormData);
   };
+  const handleBillName = (e) => {
+    setBillName(e.target.value);
+  };
+  const handleBillNumber = (e) => {
+    setBillNumber(e.target.value);
+  };
+  const handleBillEmail = (e) => {
+    setBillEmail(e.target.value);
+  };
   useEffect(() => {
     if (state) {
       state.map((item, index) => {
-        formData.checkRibbon[index] = true;
-        formData.checkCard[index] = true;
-        formData.modalOpen[index] = false;
+        if (
+          item.product_category === "축하화환" ||
+          item.product_category === "근조화환"
+        ) {
+          formData.checkRibbon[index] = true;
+        } else if (item.product_category === "행사용 상품") {
+          formData.checkRibbon[index] = false;
+          formData.checkCard[index] = false;
+        } else {
+          formData.checkRibbon[index] = true;
+          formData.checkCard[index] = true;
+          formData.modalOpen[index] = false;
+        }
       });
     }
   }, [state]);
@@ -76,6 +118,7 @@ const Order = () => {
 
   const handlePay = () => {
     const orderDatas = [];
+
     state.forEach((product, index) => {
       const orderInfo = {};
       for (const key in formData) {
@@ -87,6 +130,64 @@ const Order = () => {
         productInfo: product,
         orderInfo: orderInfo,
       });
+      if (
+        !formData.userName[index] ||
+        !formData.userTel[index] ||
+        !formData.requirement[index]
+      ) {
+        window.confirm(
+          `${index + 1}번째 상품의 주문 정보를 모두 입력해주세요.`
+        );
+        return;
+      }
+      if (
+        !formData.receiverAddress[index] ||
+        !formData.receiverDetailAddress[index]
+      ) {
+        window.confirm(
+          `${index + 1}번째 상품의 배송 정보를 모두 입력해주세요.`
+        );
+        return;
+      }
+      if (
+        !formData.deliveryDate[index] ||
+        !formData.deliveryHour[index] ||
+        !formData.deliveryMinute[index] ||
+        !formData.event[index]
+      ) {
+        window.confirm(
+          `${index + 1}번째 상품의 시간 정보를 모두 입력해주세요.`
+        );
+        return;
+      }
+      if (formData.checkRibbon[index]) {
+        if (!formData.ribbonLeft[index] || !formData.ribbonRight[index]) {
+          window.confirm(
+            `${index + 1}번째 상품의 리본 문구를 모두 입력해주세요.`
+          );
+          return;
+        }
+      }
+      if (formData.checkCard[index]) {
+        if (!formData.cardText[index]) {
+          window.confirm(
+            `${index + 1}번째 상품의 카드 문구를 모두 입력해주세요.`
+          );
+          return;
+        }
+      }
+      if (checkBill) {
+        if (!billName || !billNumber || !billEmail) {
+          window.confirm(
+            `계산서 발행을 희망할 시에 사업자 정보를 모두 입력해주세요.`
+          );
+          return;
+        }
+      }
+      if (!agree) {
+        window.confirm(`개인정보 수집이용 및 제공에 동의해주세요.`);
+        return;
+      }
     });
   };
   return (
@@ -121,7 +222,9 @@ const Order = () => {
                   </div>
                   <div className="order_box">
                     <div className="left_box">
-                      <p className="title">주문자 정보</p>
+                      <p className="title">
+                        주문자 정보 <sup>*</sup>
+                      </p>
                       <input
                         type="text"
                         value={formData.userName[index] || ""}
@@ -131,6 +234,7 @@ const Order = () => {
                         placeholder="주문자성명"
                         onFocus={() => setShowTooltip(true)}
                         onBlur={() => setShowTooltip(false)}
+                        required
                       />
                       {showTooltip && (
                         <div
@@ -149,7 +253,7 @@ const Order = () => {
                         placeholder="핸드폰"
                       />
                       <p className="title" style={{ marginTop: "1vw" }}>
-                        주문 시 요청사항
+                        주문 시 요청사항 <sup>*</sup>
                       </p>
                       <textarea
                         type="text"
@@ -160,7 +264,7 @@ const Order = () => {
                         placeholder="요청사항"
                       />
                       <p className="title" style={{ marginTop: "2vw" }}>
-                        배송 정보
+                        배송 정보 <sup>*</sup>
                       </p>
                       <div className="receiver_box">
                         <input
@@ -170,11 +274,12 @@ const Order = () => {
                             handleChange(e, "receiverName", index);
                           }}
                           placeholder="받으시는분"
+                          required
                         />
                         <select
-                          value={formData.event[index] || ""}
+                          value={formData.receiverPosition[index] || ""}
                           onChange={(e) => {
-                            handleChange(e, "event", index);
+                            handleChange(e, "receiverPosition", index);
                           }}
                         >
                           <option value="">선택</option>
@@ -184,7 +289,6 @@ const Order = () => {
                           <option value="고인">고인</option>
                         </select>
                       </div>
-
                       <input
                         type="text"
                         value={formData.receiverTel[index] || ""}
@@ -193,7 +297,6 @@ const Order = () => {
                         }}
                         placeholder="핸드폰번호"
                       />
-
                       <div className="address_box">
                         <input
                           type="text"
@@ -239,82 +342,15 @@ const Order = () => {
                         placeholder="상세주소"
                       />
                       <p className="detail_text">
-                        배송지역에 따라 추가 배송비가 부과될수 있습니다.
-                        <br />
-                        (추가 배송비는 상품 하나씩 각각 부과됩니다.)
+                        일부 지역 및 도서산간지역의 경우 지역에 따라 추가
+                        배송비가 발생할 수 있으며, 2개 이상 구매하실 경우 상품
+                        각각마다 추가 배송비가 발생합니다.
                       </p>
 
                       <p className="add_text">
                         행사 또는 예식의 경우 필히 시간을 기입하시고, 케익주문시
                         초의 갯수를 입력하세요.
                       </p>
-                      <p className="title" style={{ marginTop: "2vw" }}>
-                        계산서 발행
-                      </p>
-                      <div className="event_radio_box">
-                        <div
-                          className="radio_box"
-                          onClick={(e) => {
-                            handleChange(e, "checkBill", index, true);
-                          }}
-                        >
-                          <img
-                            src={
-                              formData.checkBill[index]
-                                ? "/images/radio_on.png"
-                                : "/images/radio_off.png"
-                            }
-                            alt=""
-                          />
-                          <p>필요</p>
-                        </div>
-                        <div
-                          className="radio_box"
-                          onClick={(e) => {
-                            handleChange(e, "checkBill", index, false);
-                          }}
-                        >
-                          <img
-                            src={
-                              formData.checkBill[index]
-                                ? "/images/radio_off.png"
-                                : "/images/radio_on.png"
-                            }
-                            alt=""
-                          />
-                          <p>불필요</p>
-                        </div>
-                      </div>
-                      {formData.checkBill[index] ? (
-                        <>
-                          <input
-                            type="text"
-                            value={formData.billName[index] || ""}
-                            onChange={(e) => {
-                              handleChange(e, "billName", index);
-                            }}
-                            placeholder="사업자 대표명"
-                          />
-                          <input
-                            type="text"
-                            value={formData.billNumber[index] || ""}
-                            onChange={(e) => {
-                              handleChange(e, "billNumber", index);
-                            }}
-                            placeholder="사업자등록번호"
-                          />
-                          <input
-                            type="text"
-                            value={formData.billEmail[index] || ""}
-                            onChange={(e) => {
-                              handleChange(e, "billEmail", index);
-                            }}
-                            placeholder="이메일"
-                          />
-                        </>
-                      ) : (
-                        ""
-                      )}
                     </div>
                     <div className="right_box">
                       <p className="title">행사 시작 시간(도착 희망 시간)</p>
@@ -376,125 +412,140 @@ const Order = () => {
                         </select>
                       </div>
                       <p className="select_text">
-                        (안내) 결혼/개업식등 행사와 예식의 경우 행사,예식을
-                        선택해주셔야합니다.
-                        <br />
-                        <br /> (안내) 당일 주문 배송시 현재 시간부터 최소한
-                        3시간 정도는 여유를 주셔야 합니다.(급한 주문일경우
-                        1566-5565로 미리 전화상담 부탁드립니다.)
-                        <br />
-                        <br /> 배송가능한 시간은 09:00 부터 22:00입니다.
-                        <br />
-                        <br /> ★11시 이전 배송을 원하시는 경우 하단의 요청사항에
-                        행사시간 기입하시고 꼭 전화부탁드립니다!
+                        * 결혼식이나 개업식 등 행사의 경우 시작 시간을 입력해
+                        주시면
+                        <br /> 시작 전에 도착할 수 있도록 접수해드리겠습니다.
+                        <br />* 당일 배송을 희망하실 경우 최소 3시간의 여유를
+                        두고 주문해주시기
+                        <br /> 바랍니다. <br />* 오전 예식이나 행사의 경우 전날
+                        미리 주문 접수를 해주셔야 정상 <br />
+                        배송 가능합니다.
                       </p>
-                      <p className="title" style={{ marginTop: "2vw" }}>
-                        리본 문구
-                      </p>
-                      <div className="event_radio_box">
-                        <div
-                          className="radio_box"
-                          onClick={(e) => {
-                            handleChange(e, "checkRibbon", index, true);
-                          }}
-                        >
-                          <img
-                            src={
-                              formData.checkRibbon[index]
-                                ? "/images/radio_on.png"
-                                : "/images/radio_off.png"
-                            }
-                            alt=""
-                          />
-                          <p>선택</p>
-                        </div>
-                        <div
-                          className="radio_box"
-                          onClick={(e) => {
-                            handleChange(e, "checkRibbon", index, false);
-                          }}
-                        >
-                          <img
-                            src={
-                              formData.checkRibbon[index]
-                                ? "/images/radio_off.png"
-                                : "/images/radio_on.png"
-                            }
-                            alt=""
-                          />
-                          <p>미선택</p>
-                        </div>
-                      </div>
-                      {formData.checkRibbon[index] ? (
+                      {product.product_category === "행사용상품" ? (
+                        ""
+                      ) : (
                         <>
-                          <input
-                            type="text"
-                            value={formData.ribbonLeft[index] || ""}
-                            onChange={(e) => {
-                              handleChange(e, "ribbonLeft", index);
-                            }}
-                            placeholder="보내는 사람_왼쪽"
-                          />
-                          <input
-                            type="text"
-                            value={formData.ribbonRight[index] || ""}
-                            onChange={(e) => {
-                              handleChange(e, "ribbonRight", index);
-                            }}
-                            placeholder="경조 메세지_오른쪽"
-                          />
+                          <p className="title" style={{ marginTop: "2vw" }}>
+                            리본 문구
+                          </p>
+                          {product.product_category === "축하화환" ||
+                          product.product_category === "근조화환" ? (
+                            ""
+                          ) : (
+                            <div className="event_radio_box">
+                              <div
+                                className="radio_box"
+                                onClick={(e) => {
+                                  handleChange(e, "checkRibbon", index, true);
+                                }}
+                              >
+                                <img
+                                  src={
+                                    formData.checkRibbon[index]
+                                      ? "/images/radio_on.png"
+                                      : "/images/radio_off.png"
+                                  }
+                                  alt=""
+                                />
+                                <p>선택</p>
+                              </div>
+                              <div
+                                className="radio_box"
+                                onClick={(e) => {
+                                  handleChange(e, "checkRibbon", index, false);
+                                }}
+                              >
+                                <img
+                                  src={
+                                    formData.checkRibbon[index]
+                                      ? "/images/radio_off.png"
+                                      : "/images/radio_on.png"
+                                  }
+                                  alt=""
+                                />
+                                <p>미선택</p>
+                              </div>
+                            </div>
+                          )}
+                          {formData.checkRibbon[index] ? (
+                            <>
+                              <input
+                                type="text"
+                                value={formData.ribbonLeft[index] || ""}
+                                onChange={(e) => {
+                                  handleChange(e, "ribbonLeft", index);
+                                }}
+                                placeholder="보내는 사람_왼쪽"
+                              />
+                              <input
+                                type="text"
+                                value={formData.ribbonRight[index] || ""}
+                                onChange={(e) => {
+                                  handleChange(e, "ribbonRight", index);
+                                }}
+                                placeholder="경조 메세지_오른쪽"
+                              />
+                            </>
+                          ) : (
+                            ""
+                          )}
+                          {product.product_category === "축하화환" ||
+                          product.product_category === "근조화환" ? (
+                            ""
+                          ) : (
+                            <>
+                              <p className="title" style={{ marginTop: "2vw" }}>
+                                카드 문구
+                              </p>
+                              <div className="event_radio_box">
+                                <div
+                                  className="radio_box"
+                                  onClick={(e) => {
+                                    handleChange(e, "checkCard", index, true);
+                                  }}
+                                >
+                                  <img
+                                    src={
+                                      formData.checkCard[index]
+                                        ? "/images/radio_on.png"
+                                        : "/images/radio_off.png"
+                                    }
+                                    alt=""
+                                  />
+                                  <p>선택</p>
+                                </div>
+                                <div
+                                  className="radio_box"
+                                  onClick={(e) => {
+                                    handleChange(e, "checkCard", index, false);
+                                  }}
+                                >
+                                  <img
+                                    src={
+                                      formData.checkCard[index]
+                                        ? "/images/radio_off.png"
+                                        : "/images/radio_on.png"
+                                    }
+                                    alt=""
+                                  />
+                                  <p>미선택</p>
+                                </div>
+                              </div>
+                              {formData.checkCard[index] ? (
+                                <textarea
+                                  type="text"
+                                  value={formData.cardText[index] || ""}
+                                  onChange={(e) => {
+                                    handleChange(e, "cardText", index);
+                                  }}
+                                  placeholder="작성내용"
+                                />
+                              ) : (
+                                ""
+                              )}
+                            </>
+                          )}
                         </>
-                      ) : (
-                        ""
-                      )}
-                      <p className="title" style={{ marginTop: "2vw" }}>
-                        카드 문구
-                      </p>
-                      <div className="event_radio_box">
-                        <div
-                          className="radio_box"
-                          onClick={(e) => {
-                            handleChange(e, "checkCard", index, true);
-                          }}
-                        >
-                          <img
-                            src={
-                              formData.checkCard[index]
-                                ? "/images/radio_on.png"
-                                : "/images/radio_off.png"
-                            }
-                            alt=""
-                          />
-                          <p>선택</p>
-                        </div>
-                        <div
-                          className="radio_box"
-                          onClick={(e) => {
-                            handleChange(e, "checkCard", index, false);
-                          }}
-                        >
-                          <img
-                            src={
-                              formData.checkCard[index]
-                                ? "/images/radio_off.png"
-                                : "/images/radio_on.png"
-                            }
-                            alt=""
-                          />
-                          <p>미선택</p>
-                        </div>
-                      </div>
-                      {formData.checkCard[index] ? (
-                        <textarea
-                          type="text"
-                          value={formData.cardText[index] || ""}
-                          onChange={(e) => {
-                            handleChange(e, "cardText", index);
-                          }}
-                          placeholder="작성내용"
-                        />
-                      ) : (
-                        ""
                       )}
                     </div>
                   </div>
@@ -502,6 +553,11 @@ const Order = () => {
               );
             })}
         </div>
+        {/* <div
+          className={
+            isScrolled ? "pay_container fixed_container" : "pay_container"
+          }
+        > */}
         <div className="pay_container">
           <div className="pay_box">
             <p className="title" style={{ marginTop: "2vw" }}>
@@ -586,16 +642,75 @@ const Order = () => {
               </div>
             </div>
             <p className="title" style={{ marginTop: "2vw" }}>
+              계산서 발행
+            </p>
+            <div className="event_radio_box">
+              <div
+                className="radio_box"
+                onClick={() => {
+                  setCheckBill(true);
+                }}
+              >
+                <img
+                  src={
+                    checkBill ? "/images/radio_on.png" : "/images/radio_off.png"
+                  }
+                  alt=""
+                />
+                <p>필요</p>
+              </div>
+              <div
+                className="radio_box"
+                onClick={() => {
+                  setCheckBill(false);
+                }}
+              >
+                <img
+                  src={
+                    checkBill ? "/images/radio_off.png" : "/images/radio_on.png"
+                  }
+                  alt=""
+                />
+                <p>불필요</p>
+              </div>
+            </div>
+            {checkBill ? (
+              <>
+                <input
+                  type="text"
+                  value={billName}
+                  onChange={handleBillName}
+                  placeholder="사업자 대표명"
+                />
+                <input
+                  type="text"
+                  value={billNumber}
+                  onChange={handleBillNumber}
+                  placeholder="사업자등록번호"
+                />
+                <input
+                  type="text"
+                  value={billEmail}
+                  onChange={handleBillEmail}
+                  placeholder="이메일"
+                />
+              </>
+            ) : (
+              ""
+            )}
+            <p className="title" style={{ marginTop: "2vw" }}>
               결제 금액
             </p>
             <div className="price_box">
               <div className="price_title">
                 <p>주문금액</p>
                 <p>할인금액</p>
+                <p>추가 배송비</p>
               </div>
               <div className="price">
                 <p>{totalFalsePrice.toLocaleString()}원</p>
                 <p>-{(totalFalsePrice - totalTruePrice).toLocaleString()}원</p>
+                <p>10,000원</p>
               </div>
             </div>
             <div className="total_box">

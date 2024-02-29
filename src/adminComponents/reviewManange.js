@@ -60,6 +60,7 @@ const ReviewManage = () => {
         <div className="row_head row">
           <p>No</p>
           <p>상품명</p>
+          <p>주문자</p>
           <p>후기 이미지</p>
           <p></p>
         </div>
@@ -74,6 +75,7 @@ const ReviewManage = () => {
               >
                 <p>{review.id}</p>
                 <p>{review.review_name}</p>
+                <p>{review.review_orderer}</p>
                 <p>{review.review_imgSrc}</p>
                 <div
                   className="delete_btn"

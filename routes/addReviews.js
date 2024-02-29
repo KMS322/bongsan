@@ -22,6 +22,7 @@ function processExcelData(data) {
   return data.map((row) => {
     return {
       review_name: String(row["review_name"]),
+      review_orderer: String(row["review_orderer"]),
       review_imgSrc: String(row["review_imgSrc"]),
     };
   });
@@ -38,6 +39,7 @@ router.post("/", async (req, res, next) => {
     for (const review of reviews) {
       const addedReview = await Review.create({
         review_name: review.review_name,
+        review_orderer: review.review_orderer,
         review_imgSrc: review.review_imgSrc,
       });
     }

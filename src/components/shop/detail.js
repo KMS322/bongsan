@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import ConfirmModal from "../confirmModal";
 import { ADD_CART_REQUEST } from "../../reducers/cart";
+import { codeText } from "./codeText";
 const Detail = () => {
   const dispatch = useDispatch();
   const { products } = useSelector((state) => state.product);
@@ -12,20 +13,12 @@ const Detail = () => {
   const { addCartDone } = useSelector((state) => state.cart);
   const { id } = useParams();
   const navigate = useNavigate();
-  const [selectedKind, setSelectedKind] = useState("");
-  const [selectedOption, setSelectedOption] = useState("");
-  const [sale, setSale] = useState(true);
   const [cnt, setCnt] = useState(1);
   const [openInfo1, setOpenInfo1] = useState(true);
   const [openInfo2, setOpenInfo2] = useState(true);
   const [openConfirmModal, setOpenConfirmModal] = useState(false);
   const [modalText, setModalText] = useState("");
-  const handleKind = (e) => {
-    setSelectedKind(e.target.value);
-  };
-  const handleOption = (e) => {
-    setSelectedOption(e.target.value);
-  };
+
   const handleCnt = (e) => {
     setCnt(e.target.value);
   };
@@ -72,7 +65,9 @@ const Detail = () => {
     return (
       <div className="detail">
         <div className="nav_box">
-          <p>HOME ▷ 축하화환 ▷ 축화화환 3단</p>
+          <p>
+            HOME ▷ {product.product_category} ▷ {product.product_name}
+          </p>
         </div>
         <div className="article_container">
           <div className="detail_container">
@@ -86,11 +81,15 @@ const Detail = () => {
             ))}
           </div>
           <div className="content_container">
-            {/* <div className="tag_box">
-              <p>#결혼식</p>
-              <p>#축하화환</p>
-              <p>#화환전문관</p>
-            </div> */}
+            {codeText
+              .filter((code) => code.category === product.product_category)
+              .map((category, index) => (
+                <div className="tag_box" key={index}>
+                  {category.tag.map((txt, index) => (
+                    <p key={index}>{txt}</p>
+                  ))}
+                </div>
+              ))}
             <div className="name_box">
               <p className="name">{product.product_name}</p>
               <img src="/images/btn_share.png" alt="" onClick={copyURL} />
@@ -101,53 +100,59 @@ const Detail = () => {
             </div>
             <div className="code_box">
               <div className="title_box">
-                <p>상품코드</p>
-                <p>배송가능지역</p>
                 <p>용도</p>
+                <p>배송가능지역</p>
               </div>
               <div className="content_box">
-                <p>d-0053</p>
-                <p>전국당일배송</p>
-                <p>결혼식 개업 행사 전시회</p>
+                <p>
+                  {codeText
+                    .filter(
+                      (code) => code.category === product.product_category
+                    )
+                    .map((code) => (
+                      <span key={code.category}>{code.text}</span>
+                    ))}
+                </p>
+                <p>전국</p>
               </div>
             </div>
-            <p className="notice">
-              <span>본 상품 이미지는 알뜰 기준으로 제작 되었습니다.</span>
-              <br />
-              알뜰 차이는 꽃송이의 크기와 풍성도 차이가 있습니다.
-              <br />
-              배송되는 제품의 화분, 포장의 부속품은 이미지와 별도로 시즌이나
-              배송지역에 따라
-              <br />
-              다를 수 있습니다.
-            </p>
+            {product.product_category === "축하화환" ? (
+              <p className="notice">
+                * 일부 결혼식장은 지정 상품 이외에는 반입이 불가하오니사전에 꼭
+                확인하시기
+                <br />
+                &nbsp;&nbsp;&nbsp;바랍니다.
+                <br /> * 상품 가격에 배송비가 포함되어 있지만 결제하실 때 일부
+                지역 및 도서산간지역의 경우
+                <br />
+                &nbsp;&nbsp;&nbsp;지역에 따라 추가 배송비가 발생할 수 있습니다.
+                <br />* 계절 및 지역에 따라 배송되는 실제 제품과 제품 이미지
+                간에 차이가 있을 수 있습니다.
+              </p>
+            ) : product.product_category === "근조화환" ? (
+              <p className="notice">
+                * 일부 장례식장은 지정 상품 이외에는 반입이 불가하오니 사전에 꼭
+                확인하시기
+                <br />
+                &nbsp;&nbsp;&nbsp;바랍니다.
+                <br /> * 상품 가격에 배송비가 포함되어 있지만 결제하실 때 일부
+                지역 및 도서산간지역의 경우
+                <br />
+                &nbsp;&nbsp;&nbsp;지역에 따라 추가 배송비가 발생할 수 있습니다.
+                <br />* 계절 및 지역에 따라 배송되는 실제 제품과 제품 이미지
+                간에 차이가 있을 수 있습니다.
+              </p>
+            ) : (
+              <p className="notice">
+                * 상품 가격에 배송비가 포함되어 있지만 결제하실 때 일부 지역 및
+                도서산간지역의 경우
+                <br />
+                &nbsp;&nbsp;&nbsp;지역에 따라 추가 배송비가 발생할 수 있습니다.
+                <br />* 계절 및 지역에 따라 배송되는 실제 제품과 제품 이미지
+                간에 차이가 있을 수 있습니다.
+              </p>
+            )}
 
-            <div className="select_box">
-              <p>상품선택</p>
-              <select value={selectedKind} onChange={handleKind}>
-                <option value="">종류</option>
-                <option value="kind1">종류1</option>
-                <option value="kind2">종류2</option>
-                <option value="kind3">종류3</option>
-              </select>
-            </div>
-            <div className="option_box">
-              <div className="option_text_box">
-                <p>알뜰</p>
-                <div className="option_price_box">
-                  <p>{Number(product.product_truePrice).toLocaleString()}원</p>
-                  <p>{Number(product.product_falsePrice).toLocaleString()}원</p>
-                </div>
-              </div>
-              <div className="option_select_box">
-                <select value={selectedOption} onChange={handleOption}>
-                  <option value="">추가옵션 선택</option>
-                  <option value="option1">추가옵션1</option>
-                  <option value="option2">추가옵션2</option>
-                  <option value="option3">추가옵션3</option>
-                </select>
-              </div>
-            </div>
             <div className="cnt_box">
               <p>수량</p>
               <div className="cnt_input_box">
@@ -187,7 +192,7 @@ const Detail = () => {
                   setOpenInfo1(!openInfo1);
                 }}
               >
-                <p>배송안내</p>
+                <p>주문안내</p>
                 <p>{openInfo1 ? "△" : "▽"}</p>
               </div>
               {openInfo1 ? (
@@ -239,7 +244,7 @@ const Detail = () => {
                   setOpenInfo2(!openInfo2);
                 }}
               >
-                <p>배송 및 교환/반품</p>
+                <p>배송 및 교환/반품 안내</p>
                 <p>{openInfo2 ? "△" : "▽"}</p>
               </div>
               {openInfo2 ? (

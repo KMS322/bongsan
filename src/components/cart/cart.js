@@ -209,7 +209,10 @@ const Cart = () => {
                     />
                     <p>{product.product_name}</p>
                     <p>
-                      {Number(product.product_falsePrice).toLocaleString()}원
+                      {Number(
+                        product.product_falsePrice && product.product_falsePrice
+                      ).toLocaleString()}
+                      원
                     </p>
                     <p>
                       {Number(product.product_truePrice).toLocaleString()}원
