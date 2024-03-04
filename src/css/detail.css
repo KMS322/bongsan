@@ -33,10 +33,12 @@
 }
 .detail .article_container .content_container .tag_box {
   display: flex;
+  flex-wrap: wrap;
 }
 .detail .article_container .content_container .tag_box p {
   font-size: 0.9vw;
   margin-right: 1vw;
+  margin-bottom: 0.4vw;
 }
 .detail .article_container .content_container .name_box {
   width: 100%;

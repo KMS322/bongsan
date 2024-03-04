@@ -81,15 +81,47 @@ const Detail = () => {
             ))}
           </div>
           <div className="content_container">
-            {codeText
-              .filter((code) => code.category === product.product_category)
-              .map((category, index) => (
-                <div className="tag_box" key={index}>
-                  {category.tag.map((txt, index) => (
-                    <p key={index}>{txt}</p>
-                  ))}
-                </div>
-              ))}
+            {product.product_category !== "행사용상품"
+              ? codeText
+                  .filter((code) => code.category === product.product_category)
+                  .map((category, index) => (
+                    <div className="tag_box" key={index}>
+                      {category.tag.map((txt, index) => (
+                        <p key={index}>{txt}</p>
+                      ))}
+                    </div>
+                  ))
+              : product.product_name === "수반"
+              ? codeText
+                  .filter((code) => code.category === product.product_category)
+                  .map((category, index) => (
+                    <div className="tag_box" key={index}>
+                      {category.tag2.map((txt, index) => (
+                        <p key={index}>{txt}</p>
+                      ))}
+                    </div>
+                  ))
+              : product.product_name === "코사지"
+              ? codeText
+                  .filter((code) => code.category === product.product_category)
+                  .map((category, index) => (
+                    <div className="tag_box" key={index}>
+                      {category.tag3.map((txt, index) => (
+                        <p key={index}>{txt}</p>
+                      ))}
+                    </div>
+                  ))
+              : product.product_name.includes("꽃목걸이")
+              ? codeText
+                  .filter((code) => code.category === product.product_category)
+                  .map((category, index) => (
+                    <div className="tag_box" key={index}>
+                      {category.tag1.map((txt, index) => (
+                        <p key={index}>{txt}</p>
+                      ))}
+                    </div>
+                  ))
+              : ""}
             <div className="name_box">
               <p className="name">{product.product_name}</p>
               <img src="/images/btn_share.png" alt="" onClick={copyURL} />
