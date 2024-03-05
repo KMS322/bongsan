@@ -9,6 +9,7 @@ router.post("/add", async (req, res, next) => {
       product_id: req.body.product_id,
       product_cnt: req.body.product_cnt,
     });
+
     res.status(200).send("added");
   } catch (error) {
     console.error(error);

@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import ConfirmModal from "../confirmModal";
 import { ADD_CART_REQUEST } from "../../reducers/cart";
 import { codeText } from "./codeText";
+import Cookies from "js-cookie";
 const Detail = () => {
   const dispatch = useDispatch();
   const { products } = useSelector((state) => state.product);
@@ -40,14 +41,30 @@ const Detail = () => {
   };
   const handleConfirm = (data) => {
     if (data === "장바구니 추가") {
-      dispatch({
-        type: ADD_CART_REQUEST,
-        data: {
-          user_id: me && Number(me.user_id),
+      if (me) {
+        dispatch({
+          type: ADD_CART_REQUEST,
+          data: {
+            user_id: me && Number(me.user_id),
+            product_id: product.id,
+            product_cnt: cnt,
+          },
+        });
+      } else {
+        const cartItemsString = Cookies.get("cart") || "[]";
+        const cartItems = JSON.parse(cartItemsString);
+        console.log("cnt : ", cnt);
+        const newItem = {
           product_id: product.id,
           product_cnt: cnt,
-        },
-      });
+        };
+        console.log("cartItems : ", cartItems);
+        const updatedCart = [...cartItems, newItem];
+        Cookies.set("cart", JSON.stringify(updatedCart));
+        setOpenConfirmModal(false);
+        setModalText("장바구니 확인하러 가기");
+        setOpenConfirmModal(true);
+      }
     } else if (data === "장바구니 확인") {
       setOpenConfirmModal(false);
       setModalText("");

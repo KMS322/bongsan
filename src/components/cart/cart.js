@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { LOAD_CART_REQUEST, DELETE_CART_REQUEST } from "../../reducers/cart";
 import { useNavigate } from "react-router-dom";
 import ConfirmModal from "../confirmModal";
+import Cookies from "js-cookie";
 const Cart = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -13,34 +14,70 @@ const Cart = () => {
   const [openConfirmModal, setOpenConfirmModal] = useState(false);
   const [modalText, setModalText] = useState("");
   const [deletedId, setDeletedId] = useState(0);
+  const [cookiesCart, setCookiesCart] = useState([]);
   useEffect(() => {
-    dispatch({
-      type: LOAD_CART_REQUEST,
-      data: {
-        user_id: me && me.user_id,
-      },
-    });
+    if (!me) {
+      const cartItemsString = Cookies.get("cart") || "[]";
+      const cartItems = JSON.parse(cartItemsString);
+      setCookiesCart(cartItems);
+      // 쿠키에서 불러온 데이터를 Redux 스토어에 저장
+    } else {
+      dispatch({
+        type: LOAD_CART_REQUEST,
+        data: {
+          user_id: me && me.user_id,
+        },
+      });
+    }
   }, [dispatch, me]);
 
-  const cartProducts =
-    cartLists && cartLists.length > 0
-      ? cartLists.map((list) => {
-          const product =
-            products &&
-            products.find((product) => product.id === Number(list.product_id));
-          return product;
-        })
-      : [];
+  let cartProducts;
+  if (me) {
+    cartProducts =
+      cartLists && cartLists.length > 0
+        ? cartLists.map((list) => {
+            const product =
+              products &&
+              products.find(
+                (product) => product.id === Number(list.product_id)
+              );
+            return product;
+          })
+        : [];
+  } else {
+    cartProducts =
+      cookiesCart && cookiesCart.length > 0
+        ? cookiesCart.map((list) => {
+            const product =
+              products &&
+              products.find(
+                (product) => product.id === Number(list.product_id)
+              );
+            return product;
+          })
+        : [];
+  }
+  console.log("cartProducts1 : ", cartProducts);
   const [allCheck, setAllCheck] = useState(true);
   const [checkboxStates, setCheckboxStates] = useState([]);
   const [cnt, setCnt] = useState([]);
   useEffect(() => {
-    const initialCheckboxStates = cartLists && cartLists.map(() => true);
+    let initialCheckboxStates;
+    if (me) {
+      initialCheckboxStates = cartLists && cartLists.map(() => true);
+    } else {
+      initialCheckboxStates = cookiesCart && cookiesCart.map(() => true);
+    }
     setCheckboxStates(initialCheckboxStates);
 
-    const initialCnt = cartLists && cartLists.map((item) => item.product_cnt);
+    let initialCnt;
+    if (me) {
+      initialCnt = cartLists && cartLists.map((item) => item.product_cnt);
+    } else {
+      initialCnt = cookiesCart && cookiesCart.map((item) => item.product_cnt);
+    }
     setCnt(initialCnt);
-  }, [cartLists]);
+  }, [cartLists, me, cookiesCart]);
 
   const handleSelectAll = () => {
     const newState = cartProducts && cartProducts.map(() => !allCheck);
@@ -89,7 +126,6 @@ const Cart = () => {
       return total;
     }, 0);
 
-  const [selectedProducts, setSelectedProducts] = useState([]);
   const handleOrder = () => {
     const selected = cartProducts.filter((_, index) => checkboxStates[index]);
 
@@ -204,10 +240,10 @@ const Cart = () => {
                       }}
                     />
                     <img
-                      src={`/products/${product.product_mainImgSrc}`}
+                      src={`/products/${product && product.product_mainImgSrc}`}
                       alt=""
                     />
-                    <p>{product.product_name}</p>
+                    <p>{product && product.product_name}</p>
                     <p>
                       {Number(
                         product.product_falsePrice && product.product_falsePrice

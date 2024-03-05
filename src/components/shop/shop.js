@@ -4,6 +4,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { LOAD_PRODUCTS_REQUEST } from "../../reducers/product";
 import Banner from "../banner";
+import Cookies from "js-cookie";
 const Shop = () => {
   const dispatch = useDispatch();
   const { products } = useSelector((state) => state.product);
@@ -14,6 +15,17 @@ const Shop = () => {
     dispatch({
       type: LOAD_PRODUCTS_REQUEST,
     });
+  }, []);
+  const initializeCookies = () => {
+    if (!Cookies.get("cart")) {
+      const expirationDate = new Date();
+      expirationDate.setDate(expirationDate.getDate() + 1);
+
+      Cookies.set("cart", "", { expires: expirationDate });
+    }
+  };
+  useEffect(() => {
+    initializeCookies();
   }, []);
   return (
     <>
