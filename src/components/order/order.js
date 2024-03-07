@@ -1,11 +1,24 @@
 import "../../css/order.css";
 import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { SEND_EMAIL_REQUEST } from "../../reducers/order";
 import { useLocation } from "react-router-dom";
 import DaumPostcode from "react-daum-postcode";
 
 const Order = () => {
   const location = useLocation();
   const { state } = location;
+  const [products, setProducts] = useState([]);
+  const dispatch = useDispatch();
+  const { sendEmailDone } = useSelector((state) => state.order);
+  console.log("products : ", products);
+  useEffect(() => {
+    if (!Array.isArray(state)) {
+      products.push(state);
+    } else {
+      setProducts(state);
+    }
+  }, []);
   const [formData, setFormData] = useState({
     userName: [],
     userTel: [],
@@ -80,8 +93,8 @@ const Order = () => {
     setBillEmail(e.target.value);
   };
   useEffect(() => {
-    if (state) {
-      state.map((item, index) => {
+    if (products && products.length > 0) {
+      products.map((item, index) => {
         if (
           item.product_category === "축하화환" ||
           item.product_category === "근조화환"
@@ -97,29 +110,29 @@ const Order = () => {
         }
       });
     }
-  }, [state]);
+  }, [products]);
   useEffect(() => {
-    if (state && state.length > 0) {
+    if (products && products.length > 0) {
       const totalFalsePrice =
-        state &&
-        state.reduce((acc, product) => {
+        products &&
+        products.reduce((acc, product) => {
           return acc + Number(product.product_falsePrice) * product.product_cnt;
         }, 0);
       setTotalFalsePrice(totalFalsePrice);
       const totalTruePrice =
-        state &&
-        state.reduce((acc, product) => {
+        products &&
+        products.reduce((acc, product) => {
           return acc + Number(product.product_truePrice) * product.product_cnt;
         }, 0);
       setTotalTruePrice(totalTruePrice);
     }
-  }, [state]);
+  }, [products]);
   const [showTooltip, setShowTooltip] = useState(false);
 
   const handlePay = () => {
     const orderDatas = [];
 
-    state.forEach((product, index) => {
+    products.forEach((product, index) => {
       const orderInfo = {};
       for (const key in formData) {
         if (formData.hasOwnProperty(key)) {
@@ -189,14 +202,26 @@ const Order = () => {
         return;
       }
     });
+
+    console.log("orderDatas : ", orderDatas);
+    dispatch({
+      type: SEND_EMAIL_REQUEST,
+      data: { orderDatas },
+    });
   };
+  // useEffect(() => {
+  //   if (sendEmailDone) {
+  //     window.location.href = "/order";
+  //   }
+  // }, [sendEmailDone]);
   return (
     <div className="order">
       <p>주문결제</p>
       <div className="article_container">
         <div className="order_container">
-          {state &&
-            state.map((product, index) => {
+          {products &&
+            products.length > 0 &&
+            products.map((product, index) => {
               return (
                 <div className="box_container" key={index}>
                   <div className="product_box">

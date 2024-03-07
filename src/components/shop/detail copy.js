@@ -7,8 +7,6 @@ import ConfirmModal from "../confirmModal";
 import { ADD_CART_REQUEST } from "../../reducers/cart";
 import { codeText } from "./codeText";
 import Cookies from "js-cookie";
-import { v4 as uuidv4 } from "uuid";
-
 const Detail = () => {
   const dispatch = useDispatch();
   const { products } = useSelector((state) => state.product);
@@ -55,11 +53,12 @@ const Detail = () => {
       } else {
         const cartItemsString = Cookies.get("cart") || "[]";
         const cartItems = JSON.parse(cartItemsString);
+        console.log("cnt : ", cnt);
         const newItem = {
-          id: uuidv4(),
           product_id: product.id,
           product_cnt: cnt,
         };
+        console.log("cartItems : ", cartItems);
         const updatedCart = [...cartItems, newItem];
         Cookies.set("cart", JSON.stringify(updatedCart));
         setOpenConfirmModal(false);
@@ -81,8 +80,7 @@ const Detail = () => {
   }, [addCartDone]);
 
   const handleBuy = () => {
-    const updatedProduct = { ...product, product_cnt: cnt };
-    navigate("/order", { state: updatedProduct });
+    navigate("/order", { state: product });
   };
   if (product) {
     return (

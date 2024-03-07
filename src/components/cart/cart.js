@@ -15,12 +15,12 @@ const Cart = () => {
   const [modalText, setModalText] = useState("");
   const [deletedId, setDeletedId] = useState(0);
   const [cookiesCart, setCookiesCart] = useState([]);
+  const [cartProducts, setCartProducts] = useState([]);
   useEffect(() => {
     if (!me) {
       const cartItemsString = Cookies.get("cart") || "[]";
       const cartItems = JSON.parse(cartItemsString);
       setCookiesCart(cartItems);
-      // 쿠키에서 불러온 데이터를 Redux 스토어에 저장
     } else {
       dispatch({
         type: LOAD_CART_REQUEST,
@@ -31,33 +31,40 @@ const Cart = () => {
     }
   }, [dispatch, me]);
 
-  let cartProducts;
-  if (me) {
-    cartProducts =
-      cartLists && cartLists.length > 0
-        ? cartLists.map((list) => {
-            const product =
-              products &&
-              products.find(
-                (product) => product.id === Number(list.product_id)
-              );
-            return product;
-          })
-        : [];
-  } else {
-    cartProducts =
-      cookiesCart && cookiesCart.length > 0
-        ? cookiesCart.map((list) => {
-            const product =
-              products &&
-              products.find(
-                (product) => product.id === Number(list.product_id)
-              );
-            return product;
-          })
-        : [];
-  }
-  console.log("cartProducts1 : ", cartProducts);
+  useEffect(() => {
+    if (me) {
+      const newCartProducts =
+        cartLists && cartLists.length > 0
+          ? cartLists.map((list) => {
+              const product =
+                products &&
+                products.find(
+                  (product) => product.id === Number(list.product_id)
+                );
+              return product;
+            })
+          : [];
+      setCartProducts(newCartProducts);
+    } else {
+      if (cookiesCart.length > 0) {
+        const newCartProducts =
+          cookiesCart && cookiesCart.length > 0
+            ? cookiesCart.map((list) => {
+                const product =
+                  products &&
+                  products.find(
+                    (product) => product.id === Number(list.product_id)
+                  );
+                return {
+                  ...product,
+                  id: list.id,
+                };
+              })
+            : [];
+        setCartProducts(newCartProducts);
+      }
+    }
+  }, [me, cartLists, cookiesCart, products]);
   const [allCheck, setAllCheck] = useState(true);
   const [checkboxStates, setCheckboxStates] = useState([]);
   const [cnt, setCnt] = useState([]);
@@ -94,26 +101,30 @@ const Cart = () => {
   const totalFalsePrice =
     cartProducts &&
     cnt &&
-    cartProducts.reduce((total, product, index) => {
-      if (checkboxStates[index]) {
-        const productPrice = Number(product.product_falsePrice);
-        const productCnt = cnt[index];
-        return total + productPrice * productCnt;
-      }
-      return total;
-    }, 0);
+    cartProducts
+      .filter((product) => product !== null)
+      .reduce((total, product, index) => {
+        if (checkboxStates[index]) {
+          const productPrice = Number(product.product_falsePrice);
+          const productCnt = cnt[index];
+          return total + productPrice * productCnt;
+        }
+        return total;
+      }, 0);
 
   const totalTruePrice =
     cartProducts &&
     cnt &&
-    cartProducts.reduce((total, product, index) => {
-      if (checkboxStates[index]) {
-        const productPrice = Number(product.product_truePrice);
-        const productCnt = cnt[index];
-        return total + productPrice * productCnt;
-      }
-      return total;
-    }, 0);
+    cartProducts
+      .filter((product) => product !== null)
+      .reduce((total, product, index) => {
+        if (checkboxStates[index]) {
+          const productPrice = Number(product.product_truePrice);
+          const productCnt = cnt[index];
+          return total + productPrice * productCnt;
+        }
+        return total;
+      }, 0);
 
   const totalQuantity =
     cartProducts &&
@@ -170,41 +181,63 @@ const Cart = () => {
   const handleConfirm = (data) => {
     if (data === "항목 삭제") {
       setOpenConfirmModal(false);
-      const selected = [deletedId];
-      dispatch({
-        type: DELETE_CART_REQUEST,
-        data: {
-          productIds: selected,
-        },
-      });
+      if (me) {
+        const selected = [deletedId];
+        dispatch({
+          type: DELETE_CART_REQUEST,
+          data: {
+            productIds: selected,
+          },
+        });
+      } else {
+        const newCookiesCart = cookiesCart.filter(
+          (item) => item.id !== deletedId
+        );
+        Cookies.set("cart", JSON.stringify(newCookiesCart));
+        setCookiesCart(newCookiesCart);
+      }
     } else if (data === "선택된 항목 삭제") {
       setOpenConfirmModal(false);
-      const selectedIds =
-        cartLists &&
-        cartLists.reduce((selected, _, index) => {
-          if (checkboxStates[index]) {
-            selected.push(cartLists[index].id);
-          }
-          return selected;
-        }, []);
-      dispatch({
-        type: DELETE_CART_REQUEST,
-        data: {
-          productIds: selectedIds,
-        },
-      });
+      if (me) {
+        const selectedIds =
+          cartLists &&
+          cartLists.reduce((selected, _, index) => {
+            if (checkboxStates[index]) {
+              selected.push(cartLists[index].id);
+            }
+            return selected;
+          }, []);
+        dispatch({
+          type: DELETE_CART_REQUEST,
+          data: {
+            productIds: selectedIds,
+          },
+        });
+      } else {
+        const newCookiesCart = cookiesCart.filter(
+          (item, index) => !checkboxStates[index]
+        );
+        Cookies.set("cart", JSON.stringify(newCookiesCart));
+        setCookiesCart(newCookiesCart);
+      }
     } else if (data === "전체 항목 삭제") {
       setOpenConfirmModal(false);
-      const allIds = cartLists.map((item) => item.id);
-      dispatch({
-        type: DELETE_CART_REQUEST,
-        data: {
-          productIds: allIds,
-        },
-      });
+      if (me) {
+        const allIds = cartLists.map((item) => item.id);
+        dispatch({
+          type: DELETE_CART_REQUEST,
+          data: {
+            productIds: allIds,
+          },
+        });
+      } else {
+        const newCookiesCart = [];
+        Cookies.set("cart", JSON.stringify(newCookiesCart));
+        setCookiesCart(newCookiesCart);
+        window.location.href = "/cart";
+      }
     }
   };
-
   return (
     <div className="cart">
       <p>장바구니</p>
@@ -222,58 +255,61 @@ const Cart = () => {
         <div className="cart_container">
           {cartProducts &&
             cnt &&
-            cartProducts.map((product, index) => {
-              return (
-                <div className="cart_box" key={index}>
-                  <div className="content_box">
-                    <img
-                      src={
-                        checkboxStates[index]
-                          ? "/images/btn_checked.png"
-                          : "/images/btn_unChecked.png"
-                      }
-                      alt=""
-                      onClick={() => {
-                        const newState = [...checkboxStates];
-                        newState[index] = !newState[index];
-                        setCheckboxStates(newState);
-                      }}
-                    />
-                    <img
-                      src={`/products/${product && product.product_mainImgSrc}`}
-                      alt=""
-                    />
-                    <p>{product && product.product_name}</p>
-                    <p>
-                      {Number(
-                        product.product_falsePrice && product.product_falsePrice
-                      ).toLocaleString()}
-                      원
-                    </p>
-                    <p>
-                      {Number(product.product_truePrice).toLocaleString()}원
-                    </p>
-                    <img
-                      src="/images/btn_delete.png"
-                      alt=""
-                      onClick={() => {
-                        handleDeleteOne(cartLists[index].id);
-                      }}
-                    />
-                    <div className="cnt_box">
-                      <p>수량</p>
-                      <input
-                        type="number"
-                        value={cnt[index]}
-                        onChange={(e) => handleCntChange(index, e.target.value)}
-                        min="1"
+            cartProducts
+              .filter((product) => product !== null)
+              .map((product, index) => {
+                return (
+                  <div className="cart_box" key={index}>
+                    <div className="content_box">
+                      <img
+                        src={
+                          checkboxStates[index]
+                            ? "/images/btn_checked.png"
+                            : "/images/btn_unChecked.png"
+                        }
+                        alt=""
+                        onClick={() => {
+                          const newState = [...checkboxStates];
+                          newState[index] = !newState[index];
+                          setCheckboxStates(newState);
+                        }}
                       />
-                      <p>개</p>
+                      <img
+                        src={`/products/${
+                          product && product.product_mainImgSrc
+                        }`}
+                        alt=""
+                      />
+                      <p>{product && product.product_name}</p>
+                      <p>
+                        {Number(product.product_falsePrice).toLocaleString()}원
+                      </p>
+                      <p>
+                        {Number(product.product_truePrice).toLocaleString()}원
+                      </p>
+                      <img
+                        src="/images/btn_delete.png"
+                        alt=""
+                        onClick={() => {
+                          handleDeleteOne(cartProducts[index].id);
+                        }}
+                      />
+                      <div className="cnt_box">
+                        <p>수량</p>
+                        <input
+                          type="number"
+                          value={cnt[index]}
+                          onChange={(e) =>
+                            handleCntChange(index, e.target.value)
+                          }
+                          min="1"
+                        />
+                        <p>개</p>
+                      </div>
                     </div>
                   </div>
-                </div>
-              );
-            })}
+                );
+              })}
 
           <div className="btn_box">
             <div className="btn" onClick={handleDeleteSelected}>

@@ -5,6 +5,7 @@ import productSaga from "./product";
 import cartSaga from "./cart";
 import reviewSaga from "./review";
 import adminSaga from "./admin";
+import orderSaga from "./order";
 import { API_URL } from "../constants";
 
 axios.defaults.baseURL = API_URL;
@@ -17,5 +18,6 @@ export default function* rootSaga() {
     fork(cartSaga),
     fork(reviewSaga),
     fork(adminSaga),
+    fork(orderSaga),
   ]);
 }
