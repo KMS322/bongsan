@@ -16,6 +16,9 @@ import { LOAD_MY_INFO_REQUEST } from "./reducers/user";
 import { LOAD_PRODUCTS_REQUEST } from "./reducers/product";
 import { LOAD_REVIEWS_REQUEST } from "./reducers/review";
 import Main from "./adminComponents/main";
+
+import OrderTest from "./components/order/orderTest";
+
 function App() {
   const dispatch = useDispatch();
   useEffect(() => {
@@ -47,6 +50,7 @@ function App() {
         <Route path="/order" element={<Order />} />
         <Route path="/review" element={<Review />} />
         <Route path="/admin" element={<Main />} />
+        <Route path="/orderTest" element={<OrderTest />} />
       </Routes>
       <Footer />
     </>
